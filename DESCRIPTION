@@ -1,0 +1,12 @@
+Package: InvertExtirp
+Title: Extirpation Analysis for Benthic Macroinvertebrates
+Version: 0.0.0.9000
+Authors@R: c(person("Lei", "Zheng", role=c("aut")),
+	person("Erik","Leppo", email="Erik.Leppo@tetratech.com", role=c("ctb","cre")))
+Description: To aid and simplify extirpation analysis for benthic macroinvertebrates through the use of built in functions.
+Depends: R (>= 3.3.2)
+License: CC0
+Encoding: UTF-8
+LazyData: true
+URL: https://github.com/leppott/InvertExtirp
+RoxygenNote: 5.0.1
