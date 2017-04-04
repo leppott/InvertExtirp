@@ -1,18 +1,22 @@
 #' A function to determine the curve shape of a binomial probability
-#' 
-#' adapted from Lester Yuan's code
+#'
+#' Adapted from Lester Yuan's code
+#'
 #' @param mnr mean predicted probability
-#' @param ubnd and lbnd upper and lower boundaries of mean predicted probability
-#' @return return one of "unimodal", "Increasing", "Decreasing", "Concave up", or NA.
-#' @keywords logistic regression, quantiles, 
+#' @param ubnd upper boundary of mean predicted probability
+#' @param lbnd lower boundary of mean predicted probability
+#' @return returns one of "unimodal", "Increasing", "Decreasing", "Concave up", or NA.
+#' @keywords logistic regression, quantiles, xc95, hc05, cdf, gam, taxon response
 #' @examples
-#' curve.shape(mean.resp, up.bound,low.bound)
+#' up.bound <- exp(up.bound.link)/(1 + exp(up.bound.link))
+#' low.bound <- exp(low.bound.link)/(1 + exp(low.bound.link))
+#' mean.resp <- exp(mean.resp.link)/(1 + exp(mean.resp.link))
+#' tolcl[i] <- curve.shape(mean.resp, up.bound,low.bound)
 #' @export
-###### 
-## 
-# mnr, ubnd, and lbnd are mean, upper, and lower prediction confidence interval
-
-"curve.shape" <- function(mnr, ubnd, lbnd) {
+curve.shape <- function(mnr, ubnd, lbnd) {##FUNCTION.curve.shape.START
+  ######
+  # mnr, ubnd, and lbnd are mean, upper, and lower prediction confidence interval
+  #####
     # Find the maximum and minimum predicted mean probabilities
     lmax <- max(mnr)
     lmin <- min(mnr)
@@ -65,4 +69,4 @@
       else # if (! (x.out | y.out | a.out | b.out)) {
       return(NA)
       # }
-}
+}##FUNCTION.curve.shape.END

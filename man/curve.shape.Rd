@@ -9,18 +9,29 @@ curve.shape(mnr, ubnd, lbnd)
 \arguments{
 \item{mnr}{mean predicted probability}
 
-\item{ubnd}{and lbnd upper and lower boundaries of mean predicted probability}
+\item{ubnd}{upper boundary of mean predicted probability}
+
+\item{lbnd}{lower boundary of mean predicted probability}
 }
 \value{
-return one of "unimodal", "Increasing", "Decreasing", "Concave up", or NA.
+returns one of "unimodal", "Increasing", "Decreasing", "Concave up", or NA.
 }
 \description{
-adapted from Lester Yuan's code
+Adapted from Lester Yuan's code
 }
 \examples{
-curve.shape(mean.resp, up.bound,low.bound)
+up.bound <- exp(up.bound.link)/(1 + exp(up.bound.link))
+low.bound <- exp(low.bound.link)/(1 + exp(low.bound.link))
+mean.resp <- exp(mean.resp.link)/(1 + exp(mean.resp.link))
+tolcl[i] <- curve.shape(mean.resp, up.bound,low.bound)
 }
+\keyword{cdf,}
+\keyword{gam,}
+\keyword{hc05,}
 \keyword{logistic}
 \keyword{quantiles,}
 \keyword{regression,}
+\keyword{response}
+\keyword{taxon}
+\keyword{xc95,}
 

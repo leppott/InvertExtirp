@@ -14,48 +14,72 @@ taxon.response(spdata, envdata, sp.siteid = "Sample.ID", species = "GENUS",
   "S/cm)")), log.x = TRUE, rounder = 0, taus = c(0, 95, 100), nbin = 61)
 }
 \arguments{
-\item{cutoff}{a required minimum sample size for calculation}
+\item{spdata}{Species data.}
 
-\item{region}{a subregion code to name the final output files}
+\item{envdata}{Environmental data.}
 
-\item{lim}{if lim == "GAM", add gam plot xc95 otherwise, add   "CDF"}
+\item{sp.siteid}{Site/sample id column; default = "Sample.ID"}
 
-\item{mtype}{could be 1 to 3, indicating which regression model to use.}
+\item{species}{; default = "GENUS"}
 
-\item{dense.N}{is the number of areas to cut into in the calculation of area under the curve}
+\item{sp.abndid}{; default = "RA"}
 
-\item{plot.pdf}{to decide if we want species vs. env plots options "none", "pdf", "tiff"}
+\item{env.siteid}{; default = "Sample.ID"}
 
-\item{add.map}{to decide if a map should be added before plots.}
+\item{xvar}{; default = "COND"}
 
-\item{log.x}{if xvar should be logtransformated}
+\item{cutoff}{; default = 30}
 
-\item{rounder}{xvar rounder, default is 0}
+\item{region}{; default = "all"}
 
-\item{taus}{determine the output the percentile of env variable}
+\item{lim}{; default ="CDF"}
 
-\item{nbin}{number of bins for logits}
+\item{coord}{; default = NULL}
 
-\item{df1, }{data frame}
+\item{mtype}{; default = 3}
 
-\item{sort.vect}{when plot, sort the taxa list according to a vector called file called sort.vec}
+\item{dense.N}{; default = 201}
 
-\item{xvar.}{xvariable, could be column index or name}
+\item{plot.pdf}{; default = F}
 
-\item{maintext}{title of the multiplots area}
+\item{add.map}{; default =F}
+
+\item{statename}{; default = NULL}
+
+\item{add.lab}{; default = F}
+
+\item{main}{Plot title (main); default = "Capture Probability of Macroinvertebrate Taxon Along Conductivity Gradient"}
+
+\item{mar}{; default = c(5,4,3, 2)}
+
+\item{xlabs}{; default = expression(paste("Conductivity ( ", mu, "S/cm)"))}
+
+\item{log.x}{; default = TRUE}
+
+\item{rounder}{xvar rounder, default = 0.}
+
+\item{taus}{; default = c(0,95,100)}
+
+\item{nbin}{Number of bins; default = 61.}
 }
 \value{
 **Need something here**
 }
 \description{
 The output of this function to return 1.Weighted Average, 2. cdf_Abundance based, 3. cdf_ presence/absence based;
-4. ecdf weighted, 5. cdf weight new; 6. Linear logistic regression, 7. quadratic logistic 8. GAM  5~7 using full data range; 
+4. ecdf weighted, 5. cdf weight new; 6. Linear logistic regression, 7. quadratic logistic 8. GAM  5~7 using full data range;
 9~11. repeat 6~8 but uses observed range for each single taxon; 12 Count. 13. Raw quantiles
 }
 \examples{
-#**Need something here**
+#
 }
+\keyword{cdf,}
+\keyword{gam,}
+\keyword{hc05,}
 \keyword{logistic}
 \keyword{quantiles,}
 \keyword{regression,}
+\keyword{response}
+\keyword{taxon}
+\keyword{xc95,}
 

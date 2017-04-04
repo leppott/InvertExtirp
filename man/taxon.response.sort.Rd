@@ -6,14 +6,14 @@
 \usage{
 taxon.response.sort(df1 = df1, xvar = "Conductivity", cutoff = 25,
   region = "all", mtype = 3, dense.N = 201, plot.pdf = F,
-  xlabs = "Specific conductivity (<U+00B5>S/cm)", add.map = FALSE,
+  xlabs = "Specific conductivity (uS/cm)", add.map = FALSE,
   GIS.cord = c("LONG_DD", "LAT_DD"), extirpation = NULL,
   maintext = "Macroinvertebrates response to specific conductivity",
   log.x = TRUE, rounder = 0, taus = c(0, 95, 100), nbin = 61,
   sort.vect = sort.vect)
 }
 \arguments{
-\item{df1, }{data frame}
+\item{df1}{data frame}
 
 \item{cutoff}{a required minimum sample size for calculation}
 
@@ -31,7 +31,7 @@ taxon.response.sort(df1 = df1, xvar = "Conductivity", cutoff = 25,
 
 \item{log.x}{if xvar should be logtransformated}
 
-\item{rounder}{xvar rounder, default is 0}
+\item{rounder}{xvar rounder, default = 0}
 
 \item{taus}{determine the output the percentile of env variable}
 
@@ -42,17 +42,29 @@ taxon.response.sort(df1 = df1, xvar = "Conductivity", cutoff = 25,
 \item{xvar.}{xvariable, could be column index or name}
 }
 \value{
-**Need something here**
+1.Weighted Average, 2. cdf_Abundance based, 3. cdf_ presence/absence based;
+4. ecdf weighted, 5. cdf weight new; 6. Linear logistic regression, 7. quadratic logistic 8. GAM  5~7 using full data range;
+9~11. repeat 6~8 but uses observed range for each single taxon; 12 Count. 13. Raw quantiles
 }
 \description{
 The output of this function to return 1.Weighted Average, 2. cdf_Abundance based, 3. cdf_ presence/absence based;
-4. ecdf weighted, 5. cdf weight new; 6. Linear logistic regression, 7. quadratic logistic 8. GAM  5~7 using full data range; 
+4. ecdf weighted, 5. cdf weight new; 6. Linear logistic regression, 7. quadratic logistic 8. GAM  5~7 using full data range;
 9~11. repeat 6~8 but uses observed range for each single taxon; 12 Count. 13. Raw quantiles
 }
 \examples{
-**Need something here**
+### Step 10 ###
+### Appendix F #####
+full.results <- taxon.response.sort(df1 = df1, xvar = "lgSO4HCO3", cutoff = 25, region = ecolab
+, mtype = 3, dense.N = 201, plot.pdf = T, xlabs = unitlab, add.map = F, , maintext = ""
+, GIS.cord = c("Long_DD", "Lat_DD"), log.x = TRUE, rounder = 0, taus = c(0,95,100), nbin = 61, sort.vect = taxalist)
 }
+\keyword{cdf,}
+\keyword{gam,}
+\keyword{hc05,}
 \keyword{logistic}
 \keyword{quantiles,}
 \keyword{regression,}
+\keyword{response}
+\keyword{taxon}
+\keyword{xc95,}
 

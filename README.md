@@ -2,7 +2,7 @@ README-InvertExtirp
 ================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-    #> Last Update: 2017-03-29 13:52:57
+    #> Last Update: 2017-04-04 16:05:18
 
 Extirpation analysis for benthic macroinvertebrates.
 
@@ -16,7 +16,7 @@ install\_github("leppott/InvertExtirp")
 Purpose
 -------
 
-To aid and simplify extirpation analysis for benthic macroinvertebrates through the use of built in functions.
+To aid and simplify extirpation analysis for benthic macroinvertebrates (or fish) through the use of built in functions.
 
 Status
 ------
