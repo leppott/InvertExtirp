@@ -5,3 +5,4 @@ README.Rmd
 NEWS.rmd
 *.Rproj
 .Rbuildignore
+data-raw

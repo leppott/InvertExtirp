@@ -1,17 +1,17 @@
 #' A function to determine the curve shape of a binomial probability
 #'
-#' Adapted from Lester Yuan's code
+#' Adapted from Lester Yuan's code.  Used in taxon.response.sort().
 #'
 #' @param mnr mean predicted probability
 #' @param ubnd upper boundary of mean predicted probability
 #' @param lbnd lower boundary of mean predicted probability
-#' @return returns one of "unimodal", "Increasing", "Decreasing", "Concave up", or NA.
+#' @return returns one of "Unimodal", "Increasing", "Decreasing", "Concave up", or NA.
 #' @keywords logistic regression, quantiles, xc95, hc05, cdf, gam, taxon response
 #' @examples
-#' up.bound <- exp(up.bound.link)/(1 + exp(up.bound.link))
-#' low.bound <- exp(low.bound.link)/(1 + exp(low.bound.link))
-#' mean.resp <- exp(mean.resp.link)/(1 + exp(mean.resp.link))
-#' tolcl[i] <- curve.shape(mean.resp, up.bound,low.bound)
+#' mean.resp <- 1:1000
+#' up.bound <- mean.resp+1
+#' low.bound <- mean.resp-1
+#' curve.shape(mean.resp, up.bound,low.bound)
 #' @export
 curve.shape <- function(mnr, ubnd, lbnd) {##FUNCTION.curve.shape.START
   ######
@@ -54,19 +54,20 @@ curve.shape <- function(mnr, ubnd, lbnd) {##FUNCTION.curve.shape.START
       }
     # The information on where the mean curve deviates from the
     # confidence limits tells us its curve shape...
+
+
       if (x.out & y.out) {
-      return("Unimodal")
+        return("Unimodal")
+      } else if (a.out & b.out) {
+        return("Concave up")
+      } else if (x.out | b.out) {
+        return("Increasing")
+      } else if (y.out | a.out) {
+        return("Decreasing")
+      } else {
+        return(NA)
       }
-      if (a.out & b.out) {
-      return("Concave up")
-      }
-      if (x.out | b.out) {
-      return("Increasing")
-      }
-      if (y.out | a.out) {
-      return("Decreasing")
-      }
-      else # if (! (x.out | y.out | a.out | b.out)) {
-      return(NA)
-      # }
+      # else # if (! (x.out | y.out | a.out | b.out)) {
+      #   return(NA)
+      # #}
 }##FUNCTION.curve.shape.END

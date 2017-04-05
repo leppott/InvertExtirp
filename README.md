@@ -1,8 +1,8 @@
-README-InvertExtirp
+README-XC95
 ================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-    #> Last Update: 2017-04-04 16:05:18
+    #> Last Update: 2017-04-05 11:00:06
 
 Extirpation analysis for benthic macroinvertebrates.
 
@@ -11,7 +11,7 @@ Installation
 
 library(devtools) \#install if needed
 
-install\_github("leppott/InvertExtirp")
+install\_github("leppott/XC95")
 
 Purpose
 -------
@@ -21,7 +21,7 @@ To aid and simplify extirpation analysis for benthic macroinvertebrates (or fish
 Status
 ------
 
-Development stage.
+Development and testing stage. Working on minimally viable package.
 
 Usage
 -----

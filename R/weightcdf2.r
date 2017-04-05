@@ -3,6 +3,7 @@
 #
 #' Simple weighted cdf
 #'
+#' Uses wtd.quantile() from Hmisc.
 #'
 #' @param df1 ; default = my.samp
 #' @param  ss Species crosstabed data; default = "ss" from global environment.
@@ -11,7 +12,7 @@
 #' @param nt Minimum number of occurence; default = 25.
 #' @param log A boolean for if the values should be log (base 10) transformed; default = TRUE
 #' @param np Number of bins; default = 61.
-#' @return **Need something here**
+#' @return data frame: taxaname, XC95.all, N
 #' @keywords logistic regression, quantiles, xc95, hc05, cdf, gam, taxon response
 #' @examples
 #' ### Step 1A. use samples to calcualte HC05
@@ -54,10 +55,11 @@ weightcdf <- function(df1 = my.samp, ss = ss, SampID = "Sample.ID", xvar = "cond
       resp <- df1[, tnames.sav[i]] > 0
       df2 <- df1[resp,]
 
-      tolval.e[i] <- wtd.quantile(df2[,xvar], df2$wt, normwt = TRUE, prob = 0.95)   ### R buildin ecdf function
+      tolval.e[i] <- Hmisc::wtd.quantile(df2[,xvar], df2$wt, normwt = TRUE, prob = 0.95)   ### R buildin ecdf function
   }##FOR.i.END
 
-  print(tolval.e)
+  #print(tolval.e)
+
   if(log) XC95.all = round(10^tolval.e)
   else   XC95.all = round(tolval.e, 1)
   dftv <- data.frame(taxaname = tnames.sav, XC95.all = XC95.all,

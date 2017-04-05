@@ -14,16 +14,16 @@ curve.shape(mnr, ubnd, lbnd)
 \item{lbnd}{lower boundary of mean predicted probability}
 }
 \value{
-returns one of "unimodal", "Increasing", "Decreasing", "Concave up", or NA.
+returns one of "Unimodal", "Increasing", "Decreasing", "Concave up", or NA.
 }
 \description{
-Adapted from Lester Yuan's code
+Adapted from Lester Yuan's code.  Used in taxon.response.sort().
 }
 \examples{
-up.bound <- exp(up.bound.link)/(1 + exp(up.bound.link))
-low.bound <- exp(low.bound.link)/(1 + exp(low.bound.link))
-mean.resp <- exp(mean.resp.link)/(1 + exp(mean.resp.link))
-tolcl[i] <- curve.shape(mean.resp, up.bound,low.bound)
+mean.resp <- 1:1000
+up.bound <- mean.resp+1
+low.bound <- mean.resp-1
+curve.shape(mean.resp, up.bound,low.bound)
 }
 \keyword{cdf,}
 \keyword{gam,}

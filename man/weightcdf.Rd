@@ -23,10 +23,10 @@ weightcdf(df1 = my.samp, ss = ss, SampID = "Sample.ID", xvar = "cond",
 \item{xvar;}{default  = "cond"}
 }
 \value{
-**Need something here**
+data frame: taxaname, XC95.all, N
 }
 \description{
-Simple weighted cdf
+Uses wtd.quantile() from Hmisc.
 }
 \examples{
 ### Step 1A. use samples to calcualte HC05
