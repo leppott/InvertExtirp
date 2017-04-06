@@ -6,7 +6,8 @@ Authors@R: c(person("Lei", "Zheng", role=c("aut")),
 Description: To aid and simplify extirpation analysis for benthic macroinvertebrates and fish against environmental variables through the use of built in functions.  Calculates the XC95 value.
 Depends: R (>= 3.3.2)
 Imports: Hmisc,
-    reshape
+    reshape,
+	mgcv
 License: GPL-2
 Encoding: UTF-8
 LazyData: true

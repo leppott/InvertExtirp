@@ -2,7 +2,7 @@
 #'
 #' The output of this function to return 1.Weighted Average, 2. cdf_Abundance based, 3. cdf_ presence/absence based;
 #' 4. ecdf weighted, 5. cdf weight new; 6. Linear logistic regression, 7. quadratic logistic 8. GAM  5~7 using full data range;
-#' 9~11. repeat 6~8 but uses observed range for each single taxon; 12 Count. 13. Raw quantiles
+#' 9~11. repeat 6~8 but uses observed range for each single taxon; 12 Count. 13. Raw quantiles.  Requires Hmisc for wtd.quantile() and Ecdf() and mgcv to gam().
 #'
 #' @param df1 data frame
 #' @param sort.vect when plot, sort the taxa list according to a vector called file called sort.vec
@@ -18,22 +18,28 @@
 #' @param log.x if xvar should be logtransformated
 #' @param rounder xvar rounder, default = 0
 #' @param taus determine the output the percentile of env variable
-#' @return 1.Weighted Average, 2. cdf_Abundance based, 3. cdf_ presence/absence based;
+#' @param wd Working directory for saving files.
+#' @return Output to the screen for each taxon as it is completed.  CDF and GAM plots are saved to the specified directory in subfolders ("cdf" and "gam").
+#' 1.Weighted Average, 2. cdf_Abundance based, 3. cdf_ presence/absence based;
 #' 4. ecdf weighted, 5. cdf weight new; 6. Linear logistic regression, 7. quadratic logistic 8. GAM  5~7 using full data range;
 #' 9~11. repeat 6~8 but uses observed range for each single taxon; 12 Count. 13. Raw quantiles
 #' @keywords logistic regression, quantiles, xc95, hc05, cdf, gam, taxon response
 #' @examples
 #' ### Step 10 ###
 #' ### Appendix F #####
+#' switch0 <- 1
+#' ecolab <- ifelse (switch0 ==1, "eco69", "eco70")
+#' unitlab <- expression(paste("SO"[4]^{2-phantom()}," + HCO"[3]^{-phantom()}," (mg/L)"))
 #' full.results <- taxon.response.sort(df1 = df1, xvar = "lgSO4HCO3", cutoff = 25, region = ecolab
 #' , mtype = 3, dense.N = 201, plot.pdf = T, xlabs = unitlab, add.map = F, , maintext = ""
-#' , GIS.cord = c("Long_DD", "Lat_DD"), log.x = TRUE, rounder = 0, taus = c(0,95,100), nbin = 61, sort.vect = taxalist)
+#' , GIS.cord = c("Long_DD", "Lat_DD"), log.x = TRUE, rounder = 0, taus = c(0,95,100), nbin = 61, sort.vect = taxalist
+#' , wd=getwd())
 #' @export
 taxon.response.sort <- function(df1 = df1, xvar="Conductivity", cutoff = 25, region = "all",
         mtype = 3, dense.N = 201, plot.pdf=F, xlabs="Specific conductivity (uS/cm)", add.map = FALSE,
         GIS.cord = c("LONG_DD", "LAT_DD"), extirpation = NULL,
         maintext = "Macroinvertebrates response to specific conductivity",
-        log.x=TRUE, rounder=0, taus=c(0,95,100), nbin = 61, sort.vect = sort.vect) {##FUNCTION.taxon.response.sort.START
+        log.x=TRUE, rounder=0, taus=c(0,95,100), nbin = 61, sort.vect = sort.vect, wd=getwd()) {##FUNCTION.taxon.response.sort.START
 
     tnames <- sort.vect
     ntaxa <- length(tnames)
@@ -136,7 +142,7 @@ taxon.response.sort <- function(df1 = df1, xvar="Conductivity", cutoff = 25, reg
         resp <- df1[, isel] > 0
         sel <- df1[resp,]
         eout <- ecdf.w(sel[,xvar], sel$wt)
-        eout2 <- wtd.quantile(sel[,xvar], sel$wt, normwt = TRUE, prob = taus[2]/100)
+        eout2 <- Hmisc::wtd.quantile(sel[,xvar], sel$wt, normwt = TRUE, prob = taus[2]/100)
         ic3 <- 1; ic4 <- 1
         while(eout(stress.u[ic3]) < taus[2]/100) ic3 <- ic3 + 1
         while(eout(stress.u[ic4]) < 0.5) ic4 <- ic4 + 1
@@ -148,7 +154,7 @@ taxon.response.sort <- function(df1 = df1, xvar="Conductivity", cutoff = 25, reg
 
         lrm1 <- glm(resp ~ dose, family="binomial")
         lrm2 <- glm(resp ~ dose + I(dose^2), family="binomial")
-        lrm3 <- gam(resp ~ s(dose,k=3), family= "binomial")
+        lrm3 <- mgcv::gam(resp ~ s(dose,k=3), family= "binomial")
         if(mtype == 1) model <- lrm1
         if(mtype == 2) model <- lrm2
         if(mtype == 3) model <- lrm3
@@ -227,7 +233,13 @@ taxon.response.sort <- function(df1 = df1, xvar="Conductivity", cutoff = 25, reg
         if(plot.pdf) {##IF.plot.pdf.START
           if(i%%6==1 ) {
             pgs <- (i-1)%/%6 + 1
-            tiff(file = paste(wd,"/", region,"/cdf/", pgs, ".taxon.cdf.tiff",sep=""),
+
+           # 20170406, add directory check
+            dir.check.add(wd,region)
+            dir.check.add(file.path(wd,region),"cdf")
+            dir.check.add(file.path(wd,region),"gam")
+           #
+           tiff(file = paste(wd,"/", region,"/cdf/", pgs, ".taxon.cdf.tiff",sep=""),
                  width = 650, height = 450, pointsize = 13)
             par(mfrow = c(2, 3), pty = "m", mar = c(4, 4, 3, 1))
 
@@ -271,7 +283,7 @@ taxon.response.sort <- function(df1 = df1, xvar="Conductivity", cutoff = 25, reg
 
     #### plot cdf
          dev.set(2)
-         Ecdf(sel[,xvar], weights = sel$wt, xlim = c(0,1), col = "black", pch = 1,
+         Hmisc::Ecdf(sel[,xvar], weights = sel$wt, xlim = c(0,1), col = "black", pch = 1,
               axes = F, main = bquote(italic(.(name.lab))), xlab = xlabs, ylab ="Cumulative proportion")
         max.pow <- ceiling(max(xlims)); min.pow <- floor(min(xlims))  ## add x range for log formation
 

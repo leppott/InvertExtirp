@@ -18,3 +18,21 @@
 #'
 #'
 "ss"
+
+#' df1
+#'
+#' Species crosstab (ss) with environmental variable lgSO4HCO3 and lat/long fields.
+#'
+#' @format a data frame with 228 variables:
+#'
+#'
+"df1"
+
+#' taxalist
+#'
+#' A vector of 142 species names.
+#'
+#' @format A vector with 142 values:
+#'
+#'
+"taxalist"

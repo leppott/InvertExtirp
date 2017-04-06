@@ -2,7 +2,7 @@ NEWS-XC95
 ================
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
-    #> Last Update: 2017-04-05 15:43:41
+    #> Last Update: 2017-04-06 12:56:48
 
 Version history.
 
@@ -13,7 +13,18 @@ Planned Updates
 
 -   Add (working) examples along with data.
 
--   Functions left to create working examples: fish.gam, fish.wt.cdf, taxon.response, taxon.response.sort, tolerance
+-   Functions left to create working examples: fish.gam, fish.wt.cdf, taxon.response, and tolerance
+
+v0.0.0.9003
+===========
+
+2017-04-06
+
+-   taxon.response.sort(). Process raw data. Add data files df1.rda and taxalist.rda. Add library mgcv reference for gam(). Updated data.R for df1 and taxalist.
+
+-   Added new function dir.check.add() to ensure output folders exist.
+
+-   DESCRIPTION. Add mgcv to Imports.
 
 v0.0.0.9002
 ===========

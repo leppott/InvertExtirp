@@ -10,7 +10,7 @@ taxon.response.sort(df1 = df1, xvar = "Conductivity", cutoff = 25,
   GIS.cord = c("LONG_DD", "LAT_DD"), extirpation = NULL,
   maintext = "Macroinvertebrates response to specific conductivity",
   log.x = TRUE, rounder = 0, taus = c(0, 95, 100), nbin = 61,
-  sort.vect = sort.vect)
+  sort.vect = sort.vect, wd = getwd())
 }
 \arguments{
 \item{df1}{data frame}
@@ -39,9 +39,12 @@ taxon.response.sort(df1 = df1, xvar = "Conductivity", cutoff = 25,
 
 \item{sort.vect}{when plot, sort the taxa list according to a vector called file called sort.vec}
 
+\item{wd}{Working directory for saving files.}
+
 \item{xvar.}{xvariable, could be column index or name}
 }
 \value{
+Output to the screen for each taxon as it is completed.  CDF and GAM plots are saved to the specified directory in subfolders ("cdf" and "gam").
 1.Weighted Average, 2. cdf_Abundance based, 3. cdf_ presence/absence based;
 4. ecdf weighted, 5. cdf weight new; 6. Linear logistic regression, 7. quadratic logistic 8. GAM  5~7 using full data range;
 9~11. repeat 6~8 but uses observed range for each single taxon; 12 Count. 13. Raw quantiles
@@ -49,14 +52,18 @@ taxon.response.sort(df1 = df1, xvar = "Conductivity", cutoff = 25,
 \description{
 The output of this function to return 1.Weighted Average, 2. cdf_Abundance based, 3. cdf_ presence/absence based;
 4. ecdf weighted, 5. cdf weight new; 6. Linear logistic regression, 7. quadratic logistic 8. GAM  5~7 using full data range;
-9~11. repeat 6~8 but uses observed range for each single taxon; 12 Count. 13. Raw quantiles
+9~11. repeat 6~8 but uses observed range for each single taxon; 12 Count. 13. Raw quantiles.  Requires Hmisc for wtd.quantile() and Ecdf() and mgcv to gam().
 }
 \examples{
 ### Step 10 ###
 ### Appendix F #####
+switch0 <- 1
+ecolab <- ifelse (switch0 ==1, "eco69", "eco70")
+unitlab <- expression(paste("SO"[4]^{2-phantom()}," + HCO"[3]^{-phantom()}," (mg/L)"))
 full.results <- taxon.response.sort(df1 = df1, xvar = "lgSO4HCO3", cutoff = 25, region = ecolab
 , mtype = 3, dense.N = 201, plot.pdf = T, xlabs = unitlab, add.map = F, , maintext = ""
-, GIS.cord = c("Long_DD", "Lat_DD"), log.x = TRUE, rounder = 0, taus = c(0,95,100), nbin = 61, sort.vect = taxalist)
+, GIS.cord = c("Long_DD", "Lat_DD"), log.x = TRUE, rounder = 0, taus = c(0,95,100), nbin = 61, sort.vect = taxalist
+, wd=getwd())
 }
 \keyword{cdf,}
 \keyword{gam,}
