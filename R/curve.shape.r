@@ -14,9 +14,9 @@
 #' curve.shape(mean.resp, up.bound,low.bound)
 #' @export
 curve.shape <- function(mnr, ubnd, lbnd) {##FUNCTION.curve.shape.START
-  ######
+  #~~~
   # mnr, ubnd, and lbnd are mean, upper, and lower prediction confidence interval
-  #####
+  #~~~
     # Find the maximum and minimum predicted mean probabilities
     lmax <- max(mnr)
     lmin <- min(mnr)

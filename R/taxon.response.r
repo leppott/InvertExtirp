@@ -28,7 +28,7 @@
 #' @param rounder xvar rounder, default = 0.
 #' @param taus ; default = c(0,95,100)
 #' @param nbin Number of bins; default = 61.
-#############
+#~~~~~~~~~~~~
 # Lei had the ones below but they don't match the function
 # @param df1, data frame
 # @param sort.vect when plot, sort the taxa list according to a vector called file called sort.vec
@@ -45,7 +45,7 @@
 # @param rounder xvar rounder, default is 0
 # @param taus determine the output the percentile of env variable
 # @param lim if lim == "GAM", add gam plot xc95 otherwise, add   "CDF"
-#####################
+#~~~~~~~~~~~~~~
 #' @return **Need something here**
 #' @keywords logistic regression, quantiles, xc95, hc05, cdf, gam, taxon response
 #' @examples
@@ -205,7 +205,7 @@ taxon.response <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GEN
 
     optsave <- matrix(NA, ncol = length(taus) + 12, nrow  = ntaxa)
 
-    #################################
+    ##~~~~~~~~~~~~~~~
     for (i in 1:ntaxa) {##FOR.i.START
       isel <- match(tnames[i], names(df1))       # selected taxa i
 
@@ -361,7 +361,7 @@ taxon.response <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GEN
 
 }##FUNCTION.taxon.response.END
 
-#############################################################################################################
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ## inverse deshrinking function
 ## `inv.deshrink` <- function(env, wa.env) {
 ##     X <- cbind(rep(1, length(wa.env)), wa.env)

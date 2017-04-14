@@ -13,7 +13,7 @@ tolerance(spdata, envdata, sp.siteid = "Sample.ID", species = "GENUS",
   main = "Capture Probability of Macroinvertebrate Taxon Along Conductivity Gradient",
   mar = c(5, 4, 3, 4), xlabs = expression(paste("Conductivity ( ", mu,
   "S/cm)")), log.x = TRUE, plus = F, rounder = 0, taus = c(50, 95),
-  nbin = 61)
+  nbin = 61, wd = getwd())
 }
 \arguments{
 \item{spdata}{Species data.}
@@ -24,7 +24,7 @@ tolerance(spdata, envdata, sp.siteid = "Sample.ID", species = "GENUS",
 
 \item{species}{Species data frame column name for taxa name; default = ""GENUS"}
 
-\item{covar}{; default = NULL}
+\item{covar}{covariance; default = NULL}
 
 \item{sp.abndid}{Species data frame column name for species abundance; default = "RA"}
 
@@ -32,11 +32,11 @@ tolerance(spdata, envdata, sp.siteid = "Sample.ID", species = "GENUS",
 
 \item{xvar}{Environmental data frame column name for analyte used in analysis; default = "cond"}
 
-\item{cutoff}{; default = 20}
+\item{cutoff}{cutoff 1; default = 20}
 
-\item{cutoff2}{; default = 10}
+\item{cutoff2}{cutoff 2; default = 10}
 
-\item{region}{; default = "all"}
+\item{region}{region.  A folder will be created in the working directory (wd) for the region; default = "all"}
 
 \item{lim}{"GAM" or "CDF" ; default = "GAM"  if lim == "GAM", add gam plot xc95 otherwise, add   "CDF"}
 
@@ -62,7 +62,7 @@ tolerance(spdata, envdata, sp.siteid = "Sample.ID", species = "GENUS",
 
 \item{mar}{Plot margins; default = c(5,4,3, 4)}
 
-\item{xlabs}{; default = expression(paste("Conductivity ( ", mu, "S/cm)"))}
+\item{xlabs}{X-axis labels for plots; default = expression(paste("Conductivity ( ", mu, "S/cm)"))}
 
 \item{log.x}{To decide if we want to log transform and plot data; default = TRUE.  log.x to use log1o transformed data, plus to use log10(+1) transformed data, sqrt}
 
@@ -73,9 +73,11 @@ tolerance(spdata, envdata, sp.siteid = "Sample.ID", species = "GENUS",
 \item{taus}{determine the output the percentile of env variable; default = c(50,95)}
 
 \item{nbin}{number of bins; default = 61}
+
+\item{wd}{Working directory for saving files.}
 }
 \value{
-**Need something here**
+Returns a data frame (cond.opt) and generates a PDF (results.taxon.gam.pdf) of plots (within the working directory in a subfolder for the region).
 }
 \description{
 A function to calculate species response curves using various models.
@@ -83,10 +85,24 @@ Get optimum value from taxon-environment relationship
 1.WA, 2. cdf_Abundance 3. cdf_p/a. 4. ecdf weighted
 5. Linear logistic 6. quadratic logistic 7. GAM  5~7 using full data range;
  11. Count. 12. Raw quantiles
- Requires the "reshape" library.
+ Requires the "reshape" and "mgcv" libraries.
 }
 \examples{
-#
+env.cond <- tol.env.cond
+ss <- tol.ss
+condunit <- expression(paste("Conductivity ( ", mu, "S/cm)", sep = ""))
+cond.opt <- tolerance(spdata= ss, envdata= env.cond,  sp.siteid="NewSampID", species="Genus", covar=NULL,
+                      sp.abndid="RA", env.siteid="NewSampID", xvar="cond", cutoff = 25, cutoff2 = 10,
+                      region = "results", lim ="GAM", coord = NULL, mtype = 3, dense.N = 201, cast = FALSE,
+                      plot.pdf = T, add.map = F, statename = NULL,  add.lab = F, add.abund=T,
+                      main = "Capture Probability of Macroinvertebrate Taxon Along Conductivity Gradient",
+                      mar = c(5,4,3,4), xlabs = condunit, log.x = T,
+                      plus = F, rounder = 3, taus = c(50,95), nbin = 61, wd=getwd())
+# view returned data frame
+View(cond.opt)
+# open saved PDF
+region = "results"
+system(paste0('open "',file.path(getwd(),region,"results.taxon.gam.pdf"),'"'))
 }
 \keyword{cdf,}
 \keyword{gam,}

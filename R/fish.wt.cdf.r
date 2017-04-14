@@ -1,4 +1,4 @@
-  ######################  4)  fish condutivity weighted method for appalanchian region####
+  ##~~~~~~~~~~~~~~  4)  fish condutivity weighted method for appalanchian region
   # Chem.eco3 ; fish
 ##
 ##  weighted.cdf function to calculate XC95 values
@@ -10,7 +10,7 @@
 ##  nt: minimum number of occurence
 ##  addtrend: if a trend should be added ( = ">" etc) in the output
 ##  np: number of bins
-#######################################
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 #' Weighted cdf function to calculate XC95 values
 #'

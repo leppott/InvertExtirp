@@ -122,7 +122,7 @@ taxon.response.sort <- function(df1 = df1, xvar="Conductivity", cutoff = 25, reg
      roc <- rep(NA, times = ntaxa)
      trend <- rep(NA, length(ntaxa))
 
-#####################################################
+###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      for (i in 1:ntaxa) {##FOR.i.START
       isel <- match(tnames[i], names(df1))       # selected taxa i
         print(i)

@@ -2,18 +2,25 @@ NEWS-XC95
 ================
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
-    #> Last Update: 2017-04-06 12:56:48
+    #> Last Update: 2017-04-14 11:14:08
 
 Version history.
 
 Planned Updates
 ===============
 
--   Update several of the functions and add documentation for the package.
+-   Continue to update several of the functions with documentation for the package.
 
--   Add (working) examples along with data.
+-   Functions left to create working examples: fish.gam, fish.wt.cdf, and taxon.response.
 
--   Functions left to create working examples: fish.gam, fish.wt.cdf, taxon.response, and tolerance
+v0.0.0.9004
+===========
+
+2017-04-14
+
+-   Revised comment strings in scripts so will properly outline in RStudio; curve.shape.R, fish.wt.cdf.R, taxon.response.R, taxaon.response.sort.R, and tolerance.R. Also modified data prep files in raw data.
+
+-   tolerance(). Tweaked for example. Added data files (tol.ss and tol.env.data). Added "mgcv::" to "gam()." and "Hmisc::" to "wtd.quantile". Created data from raw files and documented.
 
 v0.0.0.9003
 ===========

@@ -36,3 +36,21 @@
 #'
 #'
 "taxalist"
+
+#' tol.ss
+#'
+#' For tolerance() example, a species crosstab table of relative abundance of each taxon at each site/sample ID (row).
+#'
+#' @format A data frame with 1095 obs. and 340 variables; SampID and 229 taxa::
+#'
+#'
+"tol.ss"
+
+#' tol.env.cond
+#'
+#' For tolerance() example, environmental data.
+#'
+#' @format A data frame with 482 obs. and 128 variables:
+#'
+#'
+"tol.env.cond"

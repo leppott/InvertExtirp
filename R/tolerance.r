@@ -19,7 +19,7 @@
 #  log.x to use log1o transformed data, plus to use log10(+1) transformed data, sqrt
   #graphics.off()
   #library(reshape)  #not sure if got all references, EWL, 20170329
-############################
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 #' Tolerance
 #'
@@ -28,19 +28,19 @@
 #' 1.WA, 2. cdf_Abundance 3. cdf_p/a. 4. ecdf weighted
 #' 5. Linear logistic 6. quadratic logistic 7. GAM  5~7 using full data range;
 #'  11. Count. 12. Raw quantiles
-#'  Requires the "reshape" library.
+#'  Requires the "reshape" and "mgcv" libraries.
 #'
 #' @param spdata Species data.
 #' @param envdata Environmental data.
 #' @param sp.siteid Species data frame column name for site/sample id; default = "Sample.ID"
 #' @param species Species data frame column name for taxa name; default = ""GENUS"
-#' @param covar ; default = NULL
+#' @param covar covariance; default = NULL
 #' @param sp.abndid Species data frame column name for species abundance; default = "RA"
 #' @param env.siteid Environmental data frame column name for site/sample id.  Default is "Sample.ID"
 #' @param xvar Environmental data frame column name for analyte used in analysis; default = "cond"
-#' @param cutoff ; default = 20
-#' @param cutoff2 ; default = 10
-#' @param region ; default = "all"
+#' @param cutoff cutoff 1; default = 20
+#' @param cutoff2 cutoff 2; default = 10
+#' @param region region.  A folder will be created in the working directory (wd) for the region; default = "all"
 #' @param lim "GAM" or "CDF" ; default = "GAM"  if lim == "GAM", add gam plot xc95 otherwise, add   "CDF"
 #' @param coord c("LONG_DD", "LAT_DD").  Default is NULL.
 #' @param mtype 1 linear, 2 quadratic 3 gam model for ploting purpose; default = 3.
@@ -53,34 +53,56 @@
 #' @param add.abund boolean for adding abundance to map; default = T.
 #' @param main = "Capture Probability of Macroinvertebrate Taxon Along Conductivity Gradient",
 #' @param mar Plot margins; default = c(5,4,3, 4)
-#' @param xlabs ; default = expression(paste("Conductivity ( ", mu, "S/cm)"))
+#' @param xlabs X-axis labels for plots; default = expression(paste("Conductivity ( ", mu, "S/cm)"))
 #' @param log.x To decide if we want to log transform and plot data; default = TRUE.  log.x to use log1o transformed data, plus to use log10(+1) transformed data, sqrt
 #' @param plus ; default = F
 #' @param rounder How many digits; default = 0.
 #' @param taus determine the output the percentile of env variable; default = c(50,95)
 #' @param nbin number of bins; default = 61
-#' @return **Need something here**
+#' @param wd Working directory for saving files.
+#' @return Returns a data frame (cond.opt) and generates a PDF (results.taxon.gam.pdf) of plots (within the working directory in a subfolder for the region).
 #' @keywords logistic regression, quantiles, xc95, hc05, cdf, gam, taxon response
 #' @examples
-#' #
+#' env.cond <- tol.env.cond
+#' ss <- tol.ss
+#' condunit <- expression(paste("Conductivity ( ", mu, "S/cm)", sep = ""))
+#' cond.opt <- tolerance(spdata= ss, envdata= env.cond,  sp.siteid="NewSampID", species="Genus", covar=NULL,
+#'                       sp.abndid="RA", env.siteid="NewSampID", xvar="cond", cutoff = 25, cutoff2 = 10,
+#'                       region = "results", lim ="GAM", coord = NULL, mtype = 3, dense.N = 201, cast = FALSE,
+#'                       plot.pdf = T, add.map = F, statename = NULL,  add.lab = F, add.abund=T,
+#'                       main = "Capture Probability of Macroinvertebrate Taxon Along Conductivity Gradient",
+#'                       mar = c(5,4,3,4), xlabs = condunit, log.x = T,
+#'                       plus = F, rounder = 3, taus = c(50,95), nbin = 61, wd=getwd())
+#' # view returned data frame
+#' View(cond.opt)
+#' # open saved PDF
+#' region = "results"
+#' system(paste0('open "',file.path(getwd(),region,"results.taxon.gam.pdf"),'"'))
+#
 #' @export
 tolerance <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS", covar = NULL,
         sp.abndid="RA", env.siteid="Sample.ID", xvar="cond", cutoff = 20, cutoff2 = 10,
         region = "all", lim ="GAM", coord = NULL, mtype = 3, dense.N = 201, cast = TRUE,
         plot.pdf = F, add.map=F,statename = NULL,  add.lab = F, add.abund = T,
         main = "Capture Probability of Macroinvertebrate Taxon Along Conductivity Gradient",
-        mar = c(5,4,3, 4), xlabs=expression(paste("Conductivity ( ", mu, "S/cm)")),
-        log.x = TRUE, plus = F, rounder = 0, taus = c(50,95), nbin = 61) {##FUNCTION.tolerance.START
+        mar = c(5,4,3,4), xlabs=expression(paste("Conductivity ( ", mu, "S/cm)")),
+        log.x = TRUE, plus = F, rounder = 0, taus = c(50,95), nbin = 61, wd=getwd()) {##FUNCTION.tolerance.START
+
+  # 20170413, add directory check
+  dir.check.add(wd,region)
+  #dir.check.add(file.path(wd,region),"cdf")
+  #dir.check.add(file.path(wd,region),"gam")
+  wd <- file.path(wd,region)
 
   dfenv <- envdata[!is.na(envdata[,xvar]), c(env.siteid, xvar,covar, coord)]
 
   if(cast) {##IF.cast.START
-  df.sp <- data.frame(SITEID = spdata[, sp.siteid], species = spdata[, species],
-                        abund = spdata[, sp.abndid])
-  df.sp <- subset(df.sp, !is.na(species) & !is.na(abund))
-  df.tmp <- merge(df.sp, dfenv, by.x = "SITEID", by.y = env.siteid )
-  ss <- reshape::cast(df.tmp, SITEID ~ species, sum, value = "abund")
-  names(ss)[1] <- sp.siteid
+    df.sp <- data.frame(SITEID = spdata[, sp.siteid], species = spdata[, species],
+                          abund = spdata[, sp.abndid])
+    df.sp <- subset(df.sp, !is.na(species) & !is.na(abund))
+    df.tmp <- merge(df.sp, dfenv, by.x = "SITEID", by.y = env.siteid )
+    ss <- reshape::cast(df.tmp, SITEID ~ species, sum, value = "abund")
+    names(ss)[1] <- sp.siteid
   } else ss <- spdata
   ##IF.cast.END
 
@@ -95,6 +117,9 @@ tolerance <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS", 
       df1$cutcov <- cut(df1[,covar], quantile(df1[,covar], prob = c(0, 0.2, 0.4, 0.6, 0.8, 1)),
           include.lowest =T)
       levels(df1$cutcov) <- 1:5
+    } else {
+      #20170414, EWL, add condition for if covar is NULL
+      df1$cutcov <- NA
     }##IF.covar.END
 
     df2 <- df1 <- df1[order(df1[,xvar]),]
@@ -120,6 +145,8 @@ tolerance <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS", 
     df2 <- df2[order(df2[,xvar]),]
 
    #### end
+
+
    ##### function to compute area under the curve
     auc <- function(xrange, mod, dense.N) {##FUNCTION.auc.START
         x <- seq(min(xrange), max(xrange), length = dense.N - 1)
@@ -157,11 +184,11 @@ tolerance <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS", 
     totpage <- ceiling((length(tnames)+1)/6)
 
     if(add.map) {##IF.add.map.START
-       simpleCap <- function(x) {
+       simpleCap <- function(x) {##FUNCTION.simpleCap.START
                s <- strsplit(x, " ")[[1]]
                paste(toupper(substring(s, 1,1)), substring(s, 2),
                sep="", collapse=" ")
-              }
+       }##FUNCTION.simpleCap.END
       med = 1
       while(is.na(df1[med, coord[1]])) med = 1 + med
 
@@ -169,6 +196,7 @@ tolerance <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS", 
       statename <<- map.where("state", df1[med, coord[1]], df1[med, coord[2]])
       statename <- simpleCap(statename)
       }
+
        if(add.lab) {
        map.text("state", region = statename, mar = mar)
        } else {
@@ -190,7 +218,7 @@ tolerance <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS", 
     colnames(optsave) <- varnames
     rownames(optsave) <- tnames
 
-    #####################################
+    ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     for (i in 1:ntaxa) {##IF.i.START
       isel <- match(tnames[i], names(df1))       # selected taxa i
     ### (0) observed range
@@ -203,25 +231,34 @@ tolerance <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS", 
   #    WTA <- sum(df1[,isel]*df1[,xvar]*df2$wt)/sum(df1[,isel]*df2$wt)     # sample weighted weighted average
 
     ### (2)  cdf or cumsum no weighting  both abundance based and p/a based
-      csum1 <-cumsum(df1[,isel])/sum(df1[,isel])          # cumlative vectors devided total abundance
+      csum1 <-cumsum(df1[,isel])/sum(df1[,isel])          # cumlative vectors divided total abundance
       ic1 <- rep(1, length(taus))
       print(c(i, ic1) )
-      for(ii in 1:length(taus)) {
-        while(csum1[ic1[ii]] < taus[ii]/100) ic1[ii] <- ic1[ii] + 1
-      }
+      for(ii in 1:length(taus)) {##FOR.ii.START
+        if(!is.na(sum(csum1))==TRUE) {
+          while(csum1[ic1[ii]] < taus[ii]/100) ic1[ii] <- ic1[ii] + 1
+        }
+      }##FOR.ii.END
+      # 20170414, EWL, need condition for NA or NaN, else the while fails inside the for loop above
+      # added if !is.na for sum of csum1
+
     #### (3) cdf p/a
       csum2 <-cumsum(df2[,isel])/sum(df2[,isel])    # cumlative vectors devided total abundance
       ic2 <- rep(1, length(taus))
       for(ii in 1:length(taus)) {
-        while(csum1[ic2[ii]] < taus[ii]/100) ic2[ii]<- ic2[ii] + 1
+        if(!is.na(sum(csum2))==TRUE) {
+          while(csum1[ic2[ii]] < taus[ii]/100) ic2[ii]<- ic2[ii] + 1
+        }
       }
+      # 20170414, EWL, repeat extra check for same error as above
+
 
     ##### (4) cdf weighted
       pres <- df2[, isel] > 0
       sel <- df2[pres,]
       eout2 <- rep(NA, length(taus))
       for(ii in 1:length(taus)) {
-        eout2[ii] <- wtd.quantile(sel[,xvar], sel$wt, normwt = TRUE, prob = taus[ii]/100)
+        eout2[ii] <- Hmisc::wtd.quantile(sel[,xvar], sel$wt, normwt = TRUE, prob = taus[ii]/100)
       }
 
     ######### (5)(6)(7) logistic regression model
@@ -231,9 +268,13 @@ tolerance <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS", 
       lrm1 <- glm(resp ~ dose, family="binomial")
       lrm2 <- glm(resp ~ dose + I(dose^2), family="binomial")
       #### u = -b1/(2b2)  t = 1/sqrt(-2b2) for lrm2
-      lrm2.opt <- (-lrm2$coef[2]/(2*lrm2$coef[3])  )
-      lrm2.tol <- (1/sqrt(-2*lrm2$coef[3]))
-      lrm3 <- gam(resp ~ s(dose,k = 3), family= "binomial")
+      # Remove the 2 lines below, per Lei, 20170407
+      # also removes 2 columns in output
+      #lrm2.opt <- (-lrm2$coef[2]/(2*lrm2$coef[3])  )
+      #lrm2.tol <- (1/sqrt(-2*lrm2$coef[3]))
+      lrm2.opt <- NA
+      lrm2.tol <- NA
+      lrm3 <- mgcv::gam(resp ~ s(dose,k = 3), family= "binomial")
       if(mtype == 1) model <- lrm1
       if(mtype == 2) model <- lrm2
       if(mtype == 3) model <- lrm3
@@ -251,8 +292,14 @@ tolerance <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS", 
      # and store results in a matrix
          rocmat <- matrix(NA, nrow = length(x), ncol = length(y))
          for (j in 1:length(x)) {
+           if(!is.na(sum(csum2))==TRUE) {
               rocmat[j,] <- as.numeric(x[j] > y)
-          }
+           }
+         }
+         # 20170414, add error condition
+
+
+
       # Summarize all comparisons to compute area under ROC
          roc <- sum(rocmat)/(length(x)*length(y))
     #        wilcox <- wilcox.test(x, y, conf.int = FALSE)
@@ -281,6 +328,8 @@ tolerance <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS", 
 
       optsave[i,] <- c(samplen, round(c(limits, WA, tol, df1[ic1,xvar],
          df1[ic2,xvar], eout2, lrm1.95f,lrm2.95f, lrm2.opt, lrm2.tol, lrm3.95f),rounder), roc)
+         #df1[ic2,xvar], eout2, lrm1.95f,lrm2.95f, lrm3.95f),rounder), roc)
+          #20170414, EWL, remove 2 variables that Lei had me comment out above
 
       #### The following code calcualte probabilities of occurrence
       binf <- cut(df2[,xvar], cutp, include.lowest = T)
@@ -332,19 +381,19 @@ tolerance <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS", 
        y2range <- range(df1[, isel])
 
        if(add.abund) {##IF.add.abund.START
-       y2new <- (df1[,isel] - min(y2range))*diff(y1range)/diff(y2range)+ min(y1range)    # convert y2 to y1 scale
-       y1new.at <- (axTicks(2) - min(y1range))*diff(y2range)/diff(y1range)+ min(df1[, isel])    # convert to y2 scale
-       y2.lab <- round(y1new.at, 2)    # add labels at original y2 scale
-       axis(4, at = axTicks(2), labels = y2.lab, tcl =-0.4, lwd.ticks = 1)    # major ticks with labels
-       if(is.null(covar)) {
-       points(dose, y2new, pch = 21, col = 1, cex = .4, bg = "lightgray")
-       } else {
-       points(dose[y2new>0], y2new[y2new>0], pch = 21, col = 1, cex = as.numeric(covwt)*0.2, bg = "lightgray")
-       }
-       mtext("Relative Abundance", side = 4, line = 2.5, col= 1 , cex = 0.8)
-       }    else {
-       points(cutm, bvals, pch=21, col= 1, cex = 0.7, bg ="gray")                      # probability
-       }##IF.add.abund.END
+          y2new <- (df1[,isel] - min(y2range))*diff(y1range)/diff(y2range)+ min(y1range)    # convert y2 to y1 scale
+          y1new.at <- (axTicks(2) - min(y1range))*diff(y2range)/diff(y1range)+ min(df1[, isel])    # convert to y2 scale
+          y2.lab <- round(y1new.at, 2)    # add labels at original y2 scale
+          axis(4, at = axTicks(2), labels = y2.lab, tcl =-0.4, lwd.ticks = 1)    # major ticks with labels
+          if(is.null(covar)) {##IF.covar.START
+            points(dose, y2new, pch = 21, col = 1, cex = .4, bg = "lightgray")
+          } else {
+            points(dose[y2new>0], y2new[y2new>0], pch = 21, col = 1, cex = as.numeric(covwt)*0.2, bg = "lightgray")
+          }##IF.covar.END
+        mtext("Relative Abundance", side = 4, line = 2.5, col= 1 , cex = 0.8)
+        } else {
+          points(cutm, bvals, pch=21, col= 1, cex = 0.7, bg ="gray")                      # probability
+        }##IF.add.abund.END
 
        mtext(xlabs, side = 1, line = 2.3, cex = 0.9)
        mtext("Capture Probability", side = 2, line = 2.3, cex = 0.9, col=1)
