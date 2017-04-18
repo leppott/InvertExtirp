@@ -2,7 +2,7 @@ NEWS-XC95
 ================
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
-    #> Last Update: 2017-04-14 11:14:08
+    #> Last Update: 2017-04-18 11:06:41
 
 Version history.
 
@@ -11,7 +11,14 @@ Planned Updates
 
 -   Continue to update several of the functions with documentation for the package.
 
--   Functions left to create working examples: fish.gam, fish.wt.cdf, and taxon.response.
+-   Functions left to create working examples: fish.gam and fish.wt.cdf.
+
+v0.0.0.9005
+===========
+
+2017-04-18
+
+-   taxon.response(). Tweaked for example. Added and documented data files (QC\_Benthic.txt and Env\_metrics.txt as species and envdata.all). Added "mgcv::" to "gam()." and "Hmisc::" to "wtd.quantile" and "Ecdf".
 
 v0.0.0.9004
 ===========

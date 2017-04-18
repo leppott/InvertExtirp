@@ -9,7 +9,7 @@
 #' @param xvar. xvariable, could be column index or name
 #' @param cutoff a required minimum sample size for calculation
 #' @param region a subregion code to name the final output files
-#' @param mtype could be 1 to 3, indicating which regression model to use.
+#' @param mtype could be 1 to 3, indicating which regression model to use; default = 3.
 #' @param dense.N is the number of areas to cut into in the calculation of area under the curve
 #' @param plot.pdf to decide if we want species vs. env plots options "none", "pdf", "tiff"
 #' @param add.map to decide if a map should be added before plots.

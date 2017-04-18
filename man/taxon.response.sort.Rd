@@ -19,7 +19,7 @@ taxon.response.sort(df1 = df1, xvar = "Conductivity", cutoff = 25,
 
 \item{region}{a subregion code to name the final output files}
 
-\item{mtype}{could be 1 to 3, indicating which regression model to use.}
+\item{mtype}{could be 1 to 3, indicating which regression model to use; default = 3.}
 
 \item{dense.N}{is the number of areas to cut into in the calculation of area under the curve}
 

@@ -6,28 +6,29 @@
 #'
 #' @param spdata Species data.
 #' @param envdata Environmental data.
-#' @param sp.siteid Site/sample id column; default = "Sample.ID"
+#' @param sp.siteid Site/sample id column for spdata; default = "Sample.ID"
 #' @param species ; default = "GENUS"
-#' @param sp.abndid ; default = "RA"
-#' @param env.siteid ; default = "Sample.ID"
-#' @param xvar ; default = "COND"
-#' @param cutoff ; default = 30
-#' @param region ; default = "all"
-#' @param lim ; default ="CDF"
+#' @param sp.abndid Name of column for species relative abundance within sample; default = "RA"
+#' @param env.siteid Site/sample id column for envdata; default = "Sample.ID"
+#' @param xvar xvariable, could be column index or name; default = "COND"
+#' @param cutoff a required minimum sample size for calculation; default = 30
+#' @param region Region (e.g., ecoregion or bioregion) used to create directory for PDF output; default = "all"
+#' @param lim if lim == "GAM", add gam plot xc95 otherwise, add   "CDF"; default ="CDF"
 #' @param coord ; default = NULL
-#' @param mtype ; default = 3
-#' @param dense.N ; default = 201
-#' @param plot.pdf ; default = F
-#' @param add.map ; default =F
+#' @param mtype could be 1 to 3, indicating which regression model to use; default = 3
+#' @param dense.N is the number of areas to cut into in the calculation of area under the curve; default = 201
+#' @param plot.pdf to decide if we want species vs. env plots options "none", "pdf", "tiff"; default = F
+#' @param add.map to decide if a map should be added before plots; default =F
 #' @param statename ; default = NULL
 #' @param add.lab ; default = F
 #' @param main Plot title (main); default = "Capture Probability of Macroinvertebrate Taxon Along Conductivity Gradient"
 #' @param mar ; default = c(5,4,3, 2)
 #' @param xlabs ; default = expression(paste("Conductivity ( ", mu, "S/cm)"))
-#' @param log.x ; default = TRUE
+#' @param log.x if xvar should be logtransformated; default = TRUE
 #' @param rounder xvar rounder, default = 0.
-#' @param taus ; default = c(0,95,100)
+#' @param taus determine the output the percentile of env variable; default = c(0,95,100)
 #' @param nbin Number of bins; default = 61.
+#' @param wd Working directory for saving files.
 #~~~~~~~~~~~~
 # Lei had the ones below but they don't match the function
 # @param df1, data frame
@@ -46,18 +47,33 @@
 # @param taus determine the output the percentile of env variable
 # @param lim if lim == "GAM", add gam plot xc95 otherwise, add   "CDF"
 #~~~~~~~~~~~~~~
-#' @return **Need something here**
+#' @return data frame and PDFS of CDF and GAM plots saved to the specified directory in subfolders ("cdf" and "gam")
 #' @keywords logistic regression, quantiles, xc95, hc05, cdf, gam, taxon response
 #' @examples
-#' #
+#' # Environmental Variables
+#' varlist <- c("lgX3daymax", "lgMAF", "lgFallrate", "lgHigh1fall", "RBI",	"lgX3daymin")
+#' varnames <- c("3-day Max", "Mean Annual Flow", "Fall Rate", "High 1 Fall", "RBI", "3-Day Min")
+#' # select variable
+#' vari <- 1
+#' mydata <- envdata.all[!is.na(envdata.all[,varlist[vari]]),]
+#' # run function
+#' whole.values <- taxon.response(spdata = species, envdata = mydata,  sp.siteid = "BenSampID", species = "OTU",
+#' sp.abndid = "RA", env.siteid = "BenSampID", xvar = varlist[vari], cutoff = 20, region = "tol_all", lim ="GAM",
+#' coord = c("BioSta_Long", "BioSta_Lat"), mtype = 3, dense.N = 201, plot.pdf = T, add.map = F, statename = NULL,
+#' add.lab = F, main = paste("Macroinvertebrates Response to", varnames[vari]), mar = c(5,4,3,2),
+#' xlabs= varnames[vari], log.x = F, rounder = 3, taus = c(0,50,100), nbin = 51, wd = getwd())
 #' @export
-taxon.response <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS",
-        sp.abndid="RA", env.siteid="Sample.ID", xvar="COND", cutoff=30, region = "all", lim ="CDF",
-        coord = NULL, mtype = 3, dense.N = 201, plot.pdf = F, add.map=F,statename = NULL,  add.lab = F,
-        main = "Capture Probability of Macroinvertebrate Taxon Along Conductivity Gradient", mar = c(5,4,3, 2),
-        xlabs=expression(paste("Conductivity ( ", mu, "S/cm)")), log.x=TRUE, rounder=0, taus=c(0,95,100), nbin = 61) {##FUNCTION.taxon.response.START
-
+taxon.response <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS", sp.abndid="RA",
+                           env.siteid="Sample.ID", xvar="COND", cutoff=30, region = "all", lim ="CDF", coord = NULL,
+                           mtype = 3, dense.N = 201, plot.pdf = F, add.map=F, statename = NULL,  add.lab = F,
+                           main = "Capture Probability of Macroinvertebrate Taxon Along Conductivity Gradient",
+                           mar = c(5,4,3, 2), xlabs=expression(paste("Conductivity ( ", mu, "S/cm)")), log.x=TRUE,
+                           rounder=0, taus=c(0,95,100), nbin = 61, wd=getwd()) {##FUNCTION.taxon.response.START
+  #
   graphics.off()
+  # 20170417, add directory check
+  dir.check.add(wd,region)
+  #
   dfenv <- envdata[, c(env.siteid, xvar, coord)]
   xlims <- range(dfenv[,xvar], na.rm = TRUE)
   dfenv[,xvar] <- (dfenv[,xvar] - xlims[1])/diff(xlims)
@@ -171,10 +187,10 @@ taxon.response <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GEN
   #    print(dim(df1))
   # plot pdf option
     if(plot.pdf) {##IF.plot.pdf.START
-    pdf(file = paste(wd,"/", region, ".taxon.cdf.pdf",sep=""),
+    pdf(file = paste(wd,"/", region, "/", region, ".taxon.cdf.pdf",sep=""),
            width = 9, height = 6, pointsize = 12)
     par(mfrow = c(2, 3), pty = "m", mar = mar, oma=c(1.5, 0.5, 2,0.5) )
-    pdf(file = paste(wd,"/", region, ".taxon.gam.pdf",sep=""),
+    pdf(file = paste(wd,"/", region, "/", region, ".taxon.gam.pdf",sep=""),
            width = 9, height = 6.5, pointsize = 12)
     par(mfrow = c(2, 3), pty = "m", mar =mar, oma=c(1.5, 0.5, 2,0.5) )
     totpage <- ceiling((length(tnames)+1)/6)
@@ -230,13 +246,13 @@ taxon.response <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GEN
 #      eout <- ecdf.w(sel[,xvar], sel$wt)
 #      ic3 <- 1
 #      while(eout(stress.u[ic3]) < taus[2]/100) ic3 <- ic3 + 1
-      eout2 <- wtd.quantile(sel[,xvar], sel$wt, normwt = TRUE, prob = taus[2]/100)
+      eout2 <- Hmisc::wtd.quantile(sel[,xvar], sel$wt, normwt = TRUE, prob = taus[2]/100)
   ######### (5)(6)(7) logistic regression model
       resp <- df2[, isel]
       dose <- df2[, xvar]
       lrm1 <- glm(resp ~ dose, family="binomial")
       lrm2 <- glm(resp ~ dose + I(dose^2), family="binomial")
-      lrm3 <- gam(resp ~ s(dose,k=3), family= "binomial")
+      lrm3 <- mgcv::gam(resp ~ s(dose,k=3), family= "binomial")
       if(mtype == 1) model <- lrm1
       if(mtype == 2) model <- lrm2
       if(mtype == 3) model <- lrm3
@@ -338,7 +354,7 @@ taxon.response <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GEN
         }##IF.i+5.END
   #### plot cdf
        dev.set(2)
-       Ecdf(sel[,xvar], weights = sel$wt, xlim = c(0,1), col = "blue", pch = 1,
+       Hmisc::Ecdf(sel[,xvar], weights = sel$wt, xlim = c(0,1), col = "blue", pch = 1,
             axes = F, main = tnames[i], xlab = xlabs)
   #       plot.ecdf(sel[,xvar], xlim = c(0,1), col = "green", pch = 1,add = T,
   #            axes = F, main = tnames[i], xlab = xlabs)

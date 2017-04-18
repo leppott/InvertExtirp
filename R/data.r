@@ -54,3 +54,21 @@
 #'
 #'
 "tol.env.cond"
+
+#' species
+#'
+#' For taxon.response() example, a species table of relative abundance of each taxon at each site/sample ID.
+#'
+#' @format A data frame with 14,747 obs. and 26 variables; SampID and x taxa::
+#'
+#'
+"species"
+
+#' envdata.all
+#'
+#' For taxon.response() example, environmental data.
+#'
+#' @format A data frame with 518 obs. and 16 variables:
+#'
+#'
+"envdata.all"
