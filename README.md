@@ -2,7 +2,7 @@ README-XC95
 ================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-    #> Last Update: 2017-04-05 11:00:06
+    #> Last Update: 2017-04-24 16:27:43
 
 Extirpation analysis for benthic macroinvertebrates.
 
@@ -21,7 +21,7 @@ To aid and simplify extirpation analysis for benthic macroinvertebrates (or fish
 Status
 ------
 
-Development and testing stage. Working on minimally viable package.
+Minimally viable package. All functions with working examples and data.
 
 Usage
 -----

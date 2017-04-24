@@ -2,7 +2,7 @@ NEWS-XC95
 ================
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
-    #> Last Update: 2017-04-24 16:19:06
+    #> Last Update: 2017-04-24 16:27:36
 
 Version history.
 
@@ -10,6 +10,15 @@ Planned Updates
 ===============
 
 -   Only bug fixes planned at this time.
+
+-   No vignettes planned at this time.
+
+v0.0.1.0000
+===========
+
+2017-04-24
+
+-   Updated documentation to a whole number version and created a "release" on GitHub.
 
 v0.0.0.9006
 ===========
