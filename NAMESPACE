@@ -2,7 +2,6 @@
 
 export(curve.shape)
 export(dir.check.add)
-export(fish.gam)
 export(fish.wt.cdf)
 export(taxon.response)
 export(taxon.response.sort)

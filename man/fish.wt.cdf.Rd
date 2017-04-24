@@ -2,11 +2,12 @@
 % Please edit documentation in R/fish.wt.cdf.r
 \name{fish.wt.cdf}
 \alias{fish.wt.cdf}
-\title{Weighted cdf function to calculate XC95 values}
+\title{A function to calculate a weighted CDF for XC95 values.}
 \usage{
-fish.wt.cdf(datafile = datafile, ss = ss, plot = F, dogam = F,
+fish.wt.cdf(datafile = datafile, ss = ss, plot = T, dogam = F,
   SampleID = "Station_Date", tag = "", sortvect = NULL, np = 61,
-  nt = 25, addtrend = F)
+  nt = 25, addtrend = F, wd = getwd(), groups = c("BigHUC", "ECOREGL3",
+  "WS_Area"), xvar = "cond")
 }
 \arguments{
 \item{datafile}{environmental data, default = "datafile" from global environment.}
@@ -28,12 +29,28 @@ fish.wt.cdf(datafile = datafile, ss = ss, plot = F, dogam = F,
 \item{nt}{Minimum number of occurence; default = 25.}
 
 \item{addtrend}{A booleen if a trend should be added ( = ">" etc) in the output (T or F); default = F.}
+
+\item{wd}{Working directory for saving files.}
+
+\item{groups}{column names in datafile used for grouping the data; HUC (BigHUC), Ecoregion (ECOREGL3), and Watershed Area (WS_Area)}
+
+\item{xvar}{variable on which to base calculations; default  = "cond"}
 }
 \value{
-A dataframe of XC95 values.
+A dataframe of XC95 values and TIFF files of gam and/or cdf plots in the subdirectory "Results" of the directory specified by "wd".
 }
 \description{
 Weighted cdf function to calculate XC95 values
+#'
+}
+\examples{
+#' # data
+data(dta.do)
+data(ss.sites)
+# run function (~20 seconds)
+dftv.do <- fish.wt.cdf(datafile = dta.do, ss = ss.sites, plot = T, dogam = T,
+                      SampleID = "FishInvertFID", tag = "wt", sortvect = NULL, np = 61, nt = 25, addtrend = T, wd = getwd())
+View(dftv.do)
 }
 \keyword{cdf,}
 \keyword{gam,}

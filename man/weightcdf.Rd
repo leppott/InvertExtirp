@@ -14,13 +14,13 @@ weightcdf(df1 = my.samp, ss = ss, SampID = "Sample.ID", xvar = "cond",
 
 \item{SampID}{Site/sample id column; default = "Sample.ID"}
 
+\item{xvar}{variable on which to base calculations; default  = "cond"}
+
 \item{nt}{Minimum number of occurence; default = 25.}
 
 \item{log}{A boolean for if the values should be log (base 10) transformed; default = TRUE}
 
 \item{np}{Number of bins; default = 61.}
-
-\item{xvar;}{default  = "cond"}
 }
 \value{
 data frame: taxaname, XC95.all, N

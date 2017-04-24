@@ -2,16 +2,23 @@ NEWS-XC95
 ================
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
-    #> Last Update: 2017-04-18 11:06:41
+    #> Last Update: 2017-04-24 16:19:06
 
 Version history.
 
 Planned Updates
 ===============
 
--   Continue to update several of the functions with documentation for the package.
+-   Only bug fixes planned at this time.
 
--   Functions left to create working examples: fish.gam and fish.wt.cdf.
+v0.0.0.9006
+===========
+
+2017-04-24
+
+-   Removed fish.gam(). It is designed for another purpose.
+
+-   fish.wt.cdf(). Was previously named weighted.fish.cdf().
 
 v0.0.0.9005
 ===========

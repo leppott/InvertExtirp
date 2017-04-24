@@ -6,9 +6,9 @@
 #' Uses wtd.quantile() from Hmisc.
 #'
 #' @param df1 ; default = my.samp
-#' @param  ss Species crosstabed data; default = "ss" from global environment.
+#' @param ss Species crosstabed data; default = "ss" from global environment.
 #' @param SampID Site/sample id column; default = "Sample.ID"
-#' @param xvar; default  = "cond"
+#' @param xvar variable on which to base calculations; default  = "cond"
 #' @param nt Minimum number of occurence; default = 25.
 #' @param log A boolean for if the values should be log (base 10) transformed; default = TRUE
 #' @param np Number of bins; default = 61.

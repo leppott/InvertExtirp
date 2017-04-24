@@ -12,9 +12,10 @@
 ##  np: number of bins
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
+#' A function to calculate a weighted CDF for XC95 values.
+#'
 #' Weighted cdf function to calculate XC95 values
-#'
-#'
+#'#'
 #' @param datafile environmental data, default = "datafile" from global environment.
 #' @param ss Species crosstabed data; default = "ss" from global environment.
 #' @param plot A boolean to choose if plot cdf and gam plots; default = F.
@@ -25,15 +26,41 @@
 #' @param np Number of bins; default = 61.
 #' @param nt Minimum number of occurence; default = 25.
 #' @param addtrend A booleen if a trend should be added ( = ">" etc) in the output (T or F); default = F.
-#' @return A dataframe of XC95 values.
+#' @param wd Working directory for saving files.
+#' @param groups column names in datafile used for grouping the data; HUC (BigHUC), Ecoregion (ECOREGL3), and Watershed Area (WS_Area)
+#' @param xvar variable on which to base calculations; default  = "cond"
+#' @return A dataframe of XC95 values and TIFF files of gam and/or cdf plots in the subdirectory "Results" of the directory specified by "wd".
 #' @keywords logistic regression, quantiles, xc95, hc05, cdf, gam, taxon response
+#' @examples
+#' #' # data
+#' data(dta.do)
+#' data(ss.sites)
+#' # run function (~20 seconds)
+#' dftv.do <- fish.wt.cdf(datafile = dta.do, ss = ss.sites, plot = T, dogam = T,
+#'                       SampleID = "FishInvertFID", tag = "wt", sortvect = NULL, np = 61, nt = 25, addtrend = T, wd = getwd())
+#' View(dftv.do)
 #' @export
-fish.wt.cdf <- function(datafile = datafile, ss = ss, plot=F, dogam = F,
-              SampleID = "Station_Date", tag = "", sortvect = NULL, np = 61, nt = 25, addtrend =F) {##FUNCTION.fish.wt.cdf.START
+fish.wt.cdf <- function(datafile = datafile, ss = ss, plot = T, dogam = F,
+              SampleID = "Station_Date", tag = "", sortvect = NULL, np = 61, nt = 25, addtrend = F,
+              wd = getwd(), groups = c("BigHUC","ECOREGL3","WS_Area"), xvar = "cond") {##FUNCTION.fish.wt.cdf.START
+  #
+  # 20170424, change df1$cond to df1[,xvar]
+  #
+  # 20170424, add directory check
+  region <- "Results"
+  dir.check.add(wd,region)
+  dir.check.add(file.path(wd,region),"cdf")
+  dir.check.add(file.path(wd,region),"gam")
+  #wd <- file.path(wd,region)
+  #
+  #my.ss <- merge(datafile[c(SampleID, "HUC", "cond", "BigHUC","ECOREGL3","WS_AREA")], ss); dim(my.ss)   # merge env data with species data
+  # 20170418
+  my.ss <- merge(datafile,ss); dim(my.ss)
 
-  my.ss <- merge(datafile[c(SampleID, "HUC", "cond", "BigHUC","ECOREGL3","WS_AREA")], ss); dim(my.ss)   # merge env data with species data
+  # 20170418, size of datafile
+  tcol.start <- ncol(datafile)+1
 
-  tnames.count <- apply(my.ss[7:ncol(my.ss)] > 0, 2, sum)            # preliminary count of number of occurences
+  tnames.count <- apply(my.ss[tcol.start:ncol(my.ss)] > 0, 2, sum)            # preliminary count of number of occurences
   tnames.sav <- tnames.count[tnames.count >= nt ]; length(tnames.sav)
   if( is.null(sortvect)) {##IF.sortvect.START
     mod.tnames <- names(tnames.sav)
@@ -61,24 +88,38 @@ fish.wt.cdf <- function(datafile = datafile, ss = ss, plot=F, dogam = F,
 #    par(mfrow = c(2, 3), pty = "m", mar = c(4, 5, 3, 2))
 #  }
 
+  # parameter-ize (EWL, 20170424)
+  groups1 <- groups[1] # "BigHUC"
+  groups2 <- groups[2] # "ECOREGL3"
+  groups3 <- groups[3] # "WS_AREA"
+
+
   for (index in 1:length(mod.tnames)) {##IF.index.START
     ## for mod.taxa list
     imatch <- match(mod.tnames[index], names(my.ss)); imatch      # find colum index
-    HUCs <- unique(my.ss[my.ss[,imatch] > 0 ,"BigHUC"])   # find all Site HUCs
+    #HUCs <- unique(my.ss[my.ss[,imatch] > 0 ,"BigHUC"])   # find all Site HUCs
+    HUCs <- unique(my.ss[my.ss[,imatch] > 0 ,groups1])   # find all Site HUCs
     huc.list <- paste(sort(HUCs), collapse ="_")
-    eco3 <- paste(unique(my.ss[my.ss[,imatch]>0,"ECOREGL3"]), collapse="_")
-
-    wtshed <- paste(range(my.ss[my.ss[,imatch]>0,"WS_AREA"],na.rm =T), collapse="_")
+    #eco3 <- paste(unique(my.ss[my.ss[,imatch]>0,"ECOREGL3"]), collapse="_")
+    eco3 <- paste(unique(my.ss[my.ss[,imatch]>0,groups2]), collapse="_")
+    #wtshed <- paste(range(my.ss[my.ss[,imatch]>0,"WS_AREA"],na.rm =T), collapse="_")
+    wtshed <- paste(range(my.ss[my.ss[,imatch]>0,groups3],na.rm =T), collapse="_")
     df1 <- subset(my.ss, BigHUC %in% HUCs); dim(df1)
     #print(paste(nrow(my.ss), nrow(df1)))
 
-    cnew <- seq(from = min(df1$cond), to = max(df1$cond), length = 100)      # for plot
+    # cnew <- seq(from = min(df1$cond), to = max(df1$cond), length = 100)      # for plot
+    # new.data <- data.frame(cond = cnew)
+    # cond.u <- sort(unique(df1$cond))
+    cnew <- seq(from = min(df1[,xvar]), to = max(df1[,xvar]), length = 100)      # for plot
     new.data <- data.frame(cond = cnew)
-    cond.u <- sort(unique(df1$cond))
+    cond.u <- sort(unique(df1[,xvar]))
 
-    cutp <- seq(from = min(df1$cond), to = max(df1$cond), length = np)  # cut entire gradient into np bins
+    #cutp <- seq(from = min(df1$cond), to = max(df1$cond), length = np)  # cut entire gradient into np bins
+    cutp <- seq(from = min(df1[,xvar]), to = max(df1[,xvar]), length = np)  # cut entire gradient into np bins
     cutm <- 0.5*(cutp[-1] + cutp[-np])                   # find middle point
-    df1$cutf <- cut(df1$cond, cutp, include.lowest = T)   # define bins
+    #df1$cutf <- cut(df1$cond, cutp, include.lowest = T)   # define bins
+    df1$cutf <- cut(df1[,xvar], cutp, include.lowest = T)   # define bins
+
 
     wt <- 1/table(df1$cutf)                 # weight for each bin
     wt[is.infinite(wt)] <- NA
@@ -91,7 +132,8 @@ fish.wt.cdf <- function(datafile = datafile, ss = ss, plot=F, dogam = F,
     resp <- df1[, mod.tnames[index]] > 0              # response variable
     df2 <- df1[resp,]
 
-    tolval.cdf[index] <- wtd.quantile(df2$cond, df2$wt, normwt = TRUE, prob = 0.95) # xc95 calculation
+    #tolval.cdf[index] <- Hmisc::wtd.quantile(df2$cond, df2$wt, normwt = TRUE, prob = 0.95) # xc95 calculation
+    tolval.cdf[index] <- Hmisc::wtd.quantile(df2[,xvar], df2$wt, normwt = TRUE, prob = 0.95) # xc95 calculation
     total.n[index] <- nrow(df2)
     total.N[index] <- nrow(df1)
     eco3.df[index] <- eco3
@@ -100,7 +142,7 @@ fish.wt.cdf <- function(datafile = datafile, ss = ss, plot=F, dogam = F,
     #wtshd.df[index,] <- c(mywtshed[1], mywtshed[2], huc.list)
     if (dogam) {##IF.dogam.START
       ### only if dogam is selected, calculate gam based xc95 and plot
-      mod <- gam(resp ~ s(cond, k = 3), data = df1, family = "binomial")
+      mod <- mgcv::gam(resp ~ s(cond, k = 3), data = df1, family = "binomial")
       predresp <- predict(mod, new.data, type = "link", se.fit = T)
       # Compute upper and lower 90% confidence limits
       up.bound.link <- predresp$fit + qnorm(0.95) * predresp$se.fit
@@ -145,7 +187,7 @@ fish.wt.cdf <- function(datafile = datafile, ss = ss, plot=F, dogam = F,
         par(mfrow = c(2, 3), pty = "m", mar = c(4, 5, 3, 2))
         }##IF.index.END
      dev.set(2)
-     Ecdf(df2[,"cond"], weights = df2$wt, ylim = c(0,1), col = "blue", pch = 1, axes = F,
+     Hmisc::Ecdf(df2[,"cond"], weights = df2$wt, ylim = c(0,1), col = "blue", pch = 1, axes = F,
            main = bquote(italic(.(mod.tnames[index]))), ylab = "Proportion of occurrence ",
            xlab = expression(paste("Conductivity ( ", mu, "S/cm)")))
       abline(h = 0.95, col = "red", lty = 2)

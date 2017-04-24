@@ -72,3 +72,21 @@
 #'
 #'
 "envdata.all"
+
+#' dta.do
+#'
+#' For fish.weighted.cdf() example, environmental data (DO).
+#'
+#' @format A data frame with 3,259 obs. and 68 variables:
+#'
+#'
+"dta.do"
+
+#' ss.sites
+#'
+#' For fish.weighted.cdf() example, a species list of relative abundance of each taxon at each site/sample ID.
+#'
+#' @format A list with 211 with 3789 levels for Station_Date::
+#'
+#'
+"ss.sites"
