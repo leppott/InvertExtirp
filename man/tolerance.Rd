@@ -88,6 +88,7 @@ Get optimum value from taxon-environment relationship
  Requires the "reshape" and "mgcv" libraries.
 }
 \examples{
+region = "results"
 env.cond <- tol.env.cond
 ss <- tol.ss
 condunit <- expression(paste("Conductivity ( ", mu, "S/cm)", sep = ""))
@@ -101,7 +102,6 @@ cond.opt <- tolerance(spdata= ss, envdata= env.cond,  sp.siteid="NewSampID", spe
 # view returned data frame
 View(cond.opt)
 # open saved PDF
-region = "results"
 system(paste0('open "',file.path(getwd(),region,"results.taxon.gam.pdf"),'"'))
 }
 \keyword{cdf,}

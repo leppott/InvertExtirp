@@ -55,8 +55,6 @@ The output of this function to return 1.Weighted Average, 2. cdf_Abundance based
 9~11. repeat 6~8 but uses observed range for each single taxon; 12 Count. 13. Raw quantiles.  Requires Hmisc for wtd.quantile() and Ecdf() and mgcv to gam().
 }
 \examples{
-### Step 10 ###
-### Appendix F #####
 switch0 <- 1
 ecolab <- ifelse (switch0 ==1, "eco69", "eco70")
 unitlab <- expression(paste("SO"[4]^{2-phantom()}," + HCO"[3]^{-phantom()}," (mg/L)"))
@@ -64,6 +62,8 @@ full.results <- taxon.response.sort(df1 = df1, xvar = "lgSO4HCO3", cutoff = 25, 
 , mtype = 3, dense.N = 201, plot.pdf = T, xlabs = unitlab, add.map = F, , maintext = ""
 , GIS.cord = c("Long_DD", "Lat_DD"), log.x = TRUE, rounder = 0, taus = c(0,95,100), nbin = 61, sort.vect = taxalist
 , wd=getwd())
+# view results
+View(full.results)
 }
 \keyword{cdf,}
 \keyword{gam,}

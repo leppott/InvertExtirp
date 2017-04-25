@@ -25,8 +25,6 @@
 #' 9~11. repeat 6~8 but uses observed range for each single taxon; 12 Count. 13. Raw quantiles
 #' @keywords logistic regression, quantiles, xc95, hc05, cdf, gam, taxon response
 #' @examples
-#' ### Step 10 ###
-#' ### Appendix F #####
 #' switch0 <- 1
 #' ecolab <- ifelse (switch0 ==1, "eco69", "eco70")
 #' unitlab <- expression(paste("SO"[4]^{2-phantom()}," + HCO"[3]^{-phantom()}," (mg/L)"))
@@ -34,6 +32,8 @@
 #' , mtype = 3, dense.N = 201, plot.pdf = T, xlabs = unitlab, add.map = F, , maintext = ""
 #' , GIS.cord = c("Long_DD", "Lat_DD"), log.x = TRUE, rounder = 0, taus = c(0,95,100), nbin = 61, sort.vect = taxalist
 #' , wd=getwd())
+#' # view results
+#' View(full.results)
 #' @export
 taxon.response.sort <- function(df1 = df1, xvar="Conductivity", cutoff = 25, region = "all",
         mtype = 3, dense.N = 201, plot.pdf=F, xlabs="Specific conductivity (uS/cm)", add.map = FALSE,
@@ -88,26 +88,26 @@ taxon.response.sort <- function(df1 = df1, xvar="Conductivity", cutoff = 25, reg
     df1 <- df1[order(df1[,xvar]),]
 #    print(names(df1))
    #### end
-   ##### function to compute area under the curve
-    auc <- function(xrange, mod, dense.N) {##FUNCTION.auc.START
-        x <- seq(min(xrange), max(xrange), length = dense.N - 1)
-        s.area <-rep(NA, dense.N - 1)
-        y <- predict(mod, newdata = data.frame(dose = x), type = "response")
-        for (index in 1:dense.N-1) {
-          s.area[index] <- (y[index] + y[index + 1])/2*(x[index+1]-x[index])
-          }
-        tsum <- sum(s.area, na.rm=T)
-        jj=1
-        csum = sum(s.area[1:jj])
-        while(csum < taus[2]/100*tsum) {
-           jj = jj + 1
-           csum <- sum(s.area[1:jj], na.rm=T)
-        }
-
-        xc95 <- (x[jj]+ x[jj-1])/2
-        yc95 <- (y[jj]+ y[jj-1])/2
-        return(c(xc95,yc95))
-    }##FUNCTION.auc.END
+   # ##### function to compute area under the curve
+   #  auc <- function(xrange, mod, dense.N) {##FUNCTION.auc.START
+   #      x <- seq(min(xrange), max(xrange), length = dense.N - 1)
+   #      s.area <-rep(NA, dense.N - 1)
+   #      y <- predict(mod, newdata = data.frame(dose = x), type = "response")
+   #      for (index in 1:dense.N-1) {
+   #        s.area[index] <- (y[index] + y[index + 1])/2*(x[index+1]-x[index])
+   #        }
+   #      tsum <- sum(s.area, na.rm=T)
+   #      jj=1
+   #      csum = sum(s.area[1:jj])
+   #      while(csum < taus[2]/100*tsum) {
+   #         jj = jj + 1
+   #         csum <- sum(s.area[1:jj], na.rm=T)
+   #      }
+   #
+   #      xc95 <- (x[jj]+ x[jj-1])/2
+   #      yc95 <- (y[jj]+ y[jj-1])/2
+   #      return(c(xc95,yc95))
+   #  }##FUNCTION.auc.END
 
     # plot pdf option
     simpleCap <- function(x) {##FUNCTION.simpleCap.START
@@ -199,16 +199,17 @@ taxon.response.sort <- function(df1 = df1, xvar="Conductivity", cutoff = 25, reg
     ### curve shape
         tolcl[i] <- curve.shape(mean.resp, up.bound,low.bound)
     #### 5,6,7 full range
+        auc.version <- "response"
         ######## find modeled xc95 full data range
-        lrm1.95f <- auc(xrange = xrange, mod = lrm1, dense.N = dense.N)
-        lrm2.95f <- auc(xrange = xrange, mod = lrm2, dense.N = dense.N)
-        lrm3.95f <- auc(xrange = xrange, mod = lrm3, dense.N = dense.N)
+        lrm1.95f <- auc(xrange = xrange, mod = lrm1, dense.N = dense.N, taus, auc.version)
+        lrm2.95f <- auc(xrange = xrange, mod = lrm2, dense.N = dense.N, taus, auc.version)
+        lrm3.95f <- auc(xrange = xrange, mod = lrm3, dense.N = dense.N, taus, auc.version)
     #### 8,9,10 observed range
         ######## find modeled xc95 observed data range
         shortrange <- range(df1[df1[,isel]>0,xvar])
-        lrm1.95p <- auc(xrange = shortrange, mod = lrm1, dense.N = dense.N)
-        lrm2.95p <- auc(xrange = shortrange, mod = lrm2, dense.N = dense.N)
-        lrm3.95p <- auc(xrange = shortrange, mod = lrm3, dense.N = dense.N)
+        lrm1.95p <- auc(xrange = shortrange, mod = lrm1, dense.N = dense.N, taus, auc.version)
+        lrm2.95p <- auc(xrange = shortrange, mod = lrm2, dense.N = dense.N, taus, auc.version)
+        lrm3.95p <- auc(xrange = shortrange, mod = lrm3, dense.N = dense.N, taus, auc.version)
     ##### 11  n values  12 quantiles
         samplen <- sum(df1[,isel]>0)
         limits<- quantile(df1[df1[,isel]>0, xvar], probs=taus/100)   # quantile calculation

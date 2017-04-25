@@ -63,6 +63,7 @@
 #' @return Returns a data frame (cond.opt) and generates a PDF (results.taxon.gam.pdf) of plots (within the working directory in a subfolder for the region).
 #' @keywords logistic regression, quantiles, xc95, hc05, cdf, gam, taxon response
 #' @examples
+#' region = "results"
 #' env.cond <- tol.env.cond
 #' ss <- tol.ss
 #' condunit <- expression(paste("Conductivity ( ", mu, "S/cm)", sep = ""))
@@ -76,7 +77,6 @@
 #' # view returned data frame
 #' View(cond.opt)
 #' # open saved PDF
-#' region = "results"
 #' system(paste0('open "',file.path(getwd(),region,"results.taxon.gam.pdf"),'"'))
 #
 #' @export
@@ -147,34 +147,34 @@ tolerance <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS", 
    #### end
 
 
-   ##### function to compute area under the curve
-    auc <- function(xrange, mod, dense.N) {##FUNCTION.auc.START
-        x <- seq(min(xrange), max(xrange), length = dense.N - 1)
-        s.area <-rep(NA, dense.N - 1)
-        y <- predict(mod, newdata = data.frame(dose = x), type = "response")
-        for (index in 1:dense.N-1) {
-          s.area[index] <- (y[index] + y[index + 1])/2*(x[index+1]-x[index])
-          }
-        tsum <- sum(s.area, na.rm=T)         # all area
-        jj=1
-        csum = sum(s.area[1:jj])              # cum area
-        xc95 <- yc95 <- rep(NA, length(taus))
-        for(ii in 1:length(taus)) {
-        while(csum < taus[ii]/100*tsum) {
-           jj = jj + 1
-           csum <- sum(s.area[1:jj], na.rm=T)
-          }
-        if(jj == 1) {
-          xc95[ii] <- x[jj]
-          yc95[ii] <- y[jj]
-          } else {
-         xc95[ii] <- (x[jj]+ x[jj-1])/2
-         yc95[ii] <- (y[jj]+ y[jj-1])/2
-         }
-        }
-        return(c(xc95))
-#      print(xc95)
-    }##FUNCTION.auc.END
+#    ##### function to compute area under the curve
+#     auc <- function(xrange, mod, dense.N) {##FUNCTION.auc.START
+#         x <- seq(min(xrange), max(xrange), length = dense.N - 1)
+#         s.area <-rep(NA, dense.N - 1)
+#         y <- predict(mod, newdata = data.frame(dose = x), type = "response")
+#         for (index in 1:dense.N-1) {
+#           s.area[index] <- (y[index] + y[index + 1])/2*(x[index+1]-x[index])
+#           }
+#         tsum <- sum(s.area, na.rm=T)         # all area
+#         jj=1
+#         csum = sum(s.area[1:jj])              # cum area
+#         xc95 <- yc95 <- rep(NA, length(taus))
+#         for(ii in 1:length(taus)) {
+#         while(csum < taus[ii]/100*tsum) {
+#            jj = jj + 1
+#            csum <- sum(s.area[1:jj], na.rm=T)
+#           }
+#         if(jj == 1) {
+#           xc95[ii] <- x[jj]
+#           yc95[ii] <- y[jj]
+#           } else {
+#          xc95[ii] <- (x[jj]+ x[jj-1])/2
+#          yc95[ii] <- (y[jj]+ y[jj-1])/2
+#          }
+#         }
+#         return(c(xc95))
+# #      print(xc95)
+#     }##FUNCTION.auc.END
 
 # plot pdf option
     if(plot.pdf) {##IF.plot.cdf.START
@@ -319,10 +319,11 @@ tolerance <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS", 
       mean.resp <- exp(mean.resp.link)/(1+exp(mean.resp.link))
 
     #### 5,6,7 full range
+      auc.version <- "tolerance"
       ######## find modeled xc95 full data range
-      lrm1.95f <- auc(xrange = xrange, mod = lrm1, dense.N = dense.N)
-      lrm2.95f <- auc(xrange = xrange, mod = lrm2, dense.N = dense.N)
-      lrm3.95f <- auc(xrange = xrange, mod = lrm3, dense.N = dense.N)
+      lrm1.95f <- auc(xrange = xrange, mod = lrm1, dense.N = dense.N, taus, auc.version)
+      lrm2.95f <- auc(xrange = xrange, mod = lrm2, dense.N = dense.N, taus, auc.version)
+      lrm3.95f <- auc(xrange = xrange, mod = lrm3, dense.N = dense.N, taus, auc.version)
 
     ###### Save results
 

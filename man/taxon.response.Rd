@@ -86,6 +86,8 @@ sp.abndid = "RA", env.siteid = "BenSampID", xvar = varlist[vari], cutoff = 20, r
 coord = c("BioSta_Long", "BioSta_Lat"), mtype = 3, dense.N = 201, plot.pdf = T, add.map = F, statename = NULL,
 add.lab = F, main = paste("Macroinvertebrates Response to", varnames[vari]), mar = c(5,4,3,2),
 xlabs= varnames[vari], log.x = F, rounder = 3, taus = c(0,50,100), nbin = 51, wd = getwd())
+# view results
+View(whole.values)
 }
 \keyword{cdf,}
 \keyword{gam,}

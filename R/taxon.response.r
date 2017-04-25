@@ -62,6 +62,8 @@
 #' coord = c("BioSta_Long", "BioSta_Lat"), mtype = 3, dense.N = 201, plot.pdf = T, add.map = F, statename = NULL,
 #' add.lab = F, main = paste("Macroinvertebrates Response to", varnames[vari]), mar = c(5,4,3,2),
 #' xlabs= varnames[vari], log.x = F, rounder = 3, taus = c(0,50,100), nbin = 51, wd = getwd())
+#' # view results
+#' View(whole.values)
 #' @export
 taxon.response <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS", sp.abndid="RA",
                            env.siteid="Sample.ID", xvar="COND", cutoff=30, region = "all", lim ="CDF", coord = NULL,
@@ -163,26 +165,26 @@ taxon.response <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GEN
     df2 <- df2[order(df2[,xvar]),]
 
    #### end
-   ##### function to compute area under the curve
-    auc <- function(xrange, mod, dense.N) {##FUNCTION.auc.START
-        x <- seq(min(xrange), max(xrange), length = dense.N - 1)
-        s.area <-rep(NA, dense.N - 1)
-        y <- predict(mod, newdata = data.frame(dose = x), type = "response")
-        for (index in 1:dense.N-1) {
-          s.area[index] <- (y[index] + y[index + 1])/2*(x[index+1]-x[index])
-          }
-        tsum <- sum(s.area, na.rm=T)
-        jj=1
-        csum = sum(s.area[1:jj])
-        while(csum < taus[2]/100*tsum) {
-           jj = jj + 1
-           csum <- sum(s.area[1:jj], na.rm=T)
-        }
-
-        xc95 <- (x[jj]+ x[jj-1])/2
-        yc95 <- (y[jj]+ y[jj-1])/2
-        return(c(xc95,yc95))
-    }##FUNCTION.auc.END
+   # ##### function to compute area under the curve
+   #  auc <- function(xrange, mod, dense.N) {##FUNCTION.auc.START
+   #      x <- seq(min(xrange), max(xrange), length = dense.N - 1)
+   #      s.area <-rep(NA, dense.N - 1)
+   #      y <- predict(mod, newdata = data.frame(dose = x), type = "response")
+   #      for (index in 1:dense.N-1) {
+   #        s.area[index] <- (y[index] + y[index + 1])/2*(x[index+1]-x[index])
+   #        }
+   #      tsum <- sum(s.area, na.rm=T)
+   #      jj=1
+   #      csum = sum(s.area[1:jj])
+   #      while(csum < taus[2]/100*tsum) {
+   #         jj = jj + 1
+   #         csum <- sum(s.area[1:jj], na.rm=T)
+   #      }
+   #
+   #      xc95 <- (x[jj]+ x[jj-1])/2
+   #      yc95 <- (y[jj]+ y[jj-1])/2
+   #      return(c(xc95,yc95))
+   #  }##FUNCTION.auc.END
 
   #    print(dim(df1))
   # plot pdf option
@@ -269,16 +271,17 @@ taxon.response <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GEN
       mean.resp <- exp(mean.resp.link)/(1+exp(mean.resp.link))
 
   #### 5,6,7 full range
+      auc.version <- "response"
       ######## find modeled xc95 full data range
-      lrm1.95f <- auc(xrange = xrange, mod = lrm1, dense.N = dense.N)
-      lrm2.95f <- auc(xrange = xrange, mod = lrm2, dense.N = dense.N)
-      lrm3.95f <- auc(xrange = xrange, mod = lrm3, dense.N = dense.N)
+      lrm1.95f <- auc(xrange = xrange, mod = lrm1, dense.N = dense.N, taus, auc.version)
+      lrm2.95f <- auc(xrange = xrange, mod = lrm2, dense.N = dense.N, taus, auc.version)
+      lrm3.95f <- auc(xrange = xrange, mod = lrm3, dense.N = dense.N, taus, auc.version)
   #### 8,9,10 observed range
       ######## find modeled xc95 observed data range
       shortrange <- range(df2[df2[,isel]>0,xvar])
-      lrm1.95p <- auc(xrange = shortrange, mod = lrm1, dense.N = dense.N)
-      lrm2.95p <- auc(xrange = shortrange, mod = lrm2, dense.N = dense.N)
-      lrm3.95p <- auc(xrange = shortrange, mod = lrm3, dense.N = dense.N)
+      lrm1.95p <- auc(xrange = shortrange, mod = lrm1, dense.N = dense.N, taus, auc.version)
+      lrm2.95p <- auc(xrange = shortrange, mod = lrm2, dense.N = dense.N, taus, auc.version)
+      lrm3.95p <- auc(xrange = shortrange, mod = lrm3, dense.N = dense.N, taus, auc.version)
   ##### 11  n values  12 quantiles
       samplen <- length(df2[df2[,isel]>0,xvar])
       limits<- quantile(df2[df2[,isel]>0,xvar],probs=taus/100)   # quantile calculation
