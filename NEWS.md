@@ -2,7 +2,7 @@ NEWS-XC95
 ================
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
-    #> Last Update: 2017-04-24 16:27:36
+    #> Last Update: 2017-04-25 15:52:05
 
 Version history.
 
@@ -12,6 +12,20 @@ Planned Updates
 -   Only bug fixes planned at this time.
 
 -   No vignettes planned at this time.
+
+v0.0.1.9002
+===========
+
+2017-04-25
+
+-   Update News.rd and remove an extra folder left from testing. No modifications to code.
+
+v0.0.1.9001
+===========
+
+2017-04-25
+
+-   Added area under the curve functions (auc.response() and auc.tolerance()) as independant functions. Removed code from the other functions (taxon.response(), taxon.response.sort(), and tolerance()).
 
 v0.0.1.0000
 ===========
