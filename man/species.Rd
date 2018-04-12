@@ -12,4 +12,3 @@ species
 For taxon.response() example, a species table of relative abundance of each taxon at each site/sample ID.
 }
 \keyword{datasets}
-

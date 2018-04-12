@@ -12,4 +12,3 @@ dta.do
 For fish.weighted.cdf() example, environmental data (DO).
 }
 \keyword{datasets}
-

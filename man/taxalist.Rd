@@ -12,4 +12,3 @@ taxalist
 A vector of 142 species names.
 }
 \keyword{datasets}
-

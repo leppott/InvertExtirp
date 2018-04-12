@@ -113,4 +113,3 @@ system(paste0('open "',file.path(getwd(),region,"results.taxon.gam.pdf"),'"'))
 \keyword{response}
 \keyword{taxon}
 \keyword{xc95,}
-

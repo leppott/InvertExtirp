@@ -34,4 +34,3 @@ curve.shape(mean.resp, up.bound,low.bound)
 \keyword{response}
 \keyword{taxon}
 \keyword{xc95,}
-

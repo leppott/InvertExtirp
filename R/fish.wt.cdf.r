@@ -30,19 +30,22 @@
 #' @param groups column names in datafile used for grouping the data; HUC (BigHUC), Ecoregion (ECOREGL3), and Watershed Area (WS_Area)
 #' @param xvar variable on which to base calculations; default  = "cond"
 #' @return A dataframe of XC95 values and TIFF files of gam and/or cdf plots in the subdirectory "Results" of the directory specified by "wd".
-#' @keywords logistic regression, quantiles, xc95, hc05, cdf, gam, taxon response
+#'
 #' @examples
 #' #' # data
 #' data(dta.do)
 #' data(ss.sites)
 #' # run function (~20 seconds)
-#' dftv.do <- fish.wt.cdf(datafile = dta.do, ss = ss.sites, plot = T, dogam = T,
-#'                       SampleID = "FishInvertFID", tag = "wt", sortvect = NULL, np = 61, nt = 25, addtrend = T, wd = getwd())
+#' dftv.do <- fish.wt.cdf(datafile = dta.do, ss = ss.sites, plot = T, dogam = T
+#'                       , SampleID = "Station_Date", tag = "wt", sortvect = NULL
+#'                       , np = 61, nt = 25, addtrend = T
+#'                       , wd = getwd(), groups = c("BigHUC","ECOREGL3","WS_AREA")
+#'                       , xvar = "cond")
 #' View(dftv.do)
 #' @export
 fish.wt.cdf <- function(datafile = datafile, ss = ss, plot = T, dogam = F,
               SampleID = "Station_Date", tag = "", sortvect = NULL, np = 61, nt = 25, addtrend = F,
-              wd = getwd(), groups = c("BigHUC","ECOREGL3","WS_Area"), xvar = "cond") {##FUNCTION.fish.wt.cdf.START
+              wd = getwd(), groups = c("BigHUC","ECOREGL3","WS_AREA"), xvar = "cond") {##FUNCTION.fish.wt.cdf.START
   #
   # 20170424, change df1$cond to df1[,xvar]
   #

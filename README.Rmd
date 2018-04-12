@@ -1,0 +1,39 @@
+---
+title: "README-XC95"
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+```{r, echo = FALSE}
+cat(paste0("Last Update: ",Sys.time()))
+```
+
+Extirpation analysis for benthic macroinvertebrates.
+
+Installation
+------------
+library(devtools)  #install if needed
+
+install_github("leppott/XC95")
+
+Purpose
+------------
+To aid and simplify extirpation analysis for benthic macroinvertebrates (or fish) through the use of built in functions.
+
+Status
+------------
+Minimally viable package. All functions with working examples and data.
+
+
+Usage
+------------
+

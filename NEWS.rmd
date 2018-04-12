@@ -1,0 +1,110 @@
+---
+title: "NEWS-XC95"
+output: github_document
+  #md_document:
+   # variant: markdown_github
+---
+
+<!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "NEWS-"
+)
+```
+
+```{r, echo = FALSE}
+cat(paste0("Last Update: ",Sys.time()))
+```
+
+Version history.
+
+# Planned Updates
+
+* Only bug fixes planned at this time.
+
+* No vignettes planned at this time.
+
+# v0.0.1.9003
+2018-04-12
+
+* fish.wt.cdf, Example
+    + Updated group WS_Area to WS_AREA to match example data.
+    + Updated example function to include groups and xvar.
+    + Updated example SampleID from FishInvertID to Station_Date.
+
+# v0.0.1.9002
+2017-04-25
+
+* Update News.rd and remove an extra folder left from testing.  No modifications to code.
+
+# v0.0.1.9001
+2017-04-25
+
+* Added area under the curve functions (auc.response() and auc.tolerance()) as independant functions.  Removed code from the other functions (taxon.response(), taxon.response.sort(), and tolerance()).
+
+# v0.0.1.0000
+2017-04-24
+
+* Updated documentation to a whole number version and created a "release" on GitHub.
+
+# v0.0.0.9006
+2017-04-24
+
+* Removed fish.gam().  It is designed for another purpose.
+
+* fish.wt.cdf().  Was previously named weighted.fish.cdf().
+
+
+# v0.0.0.9005
+2017-04-18
+
+* taxon.response().  Tweaked for example.  Added and documented data files (QC_Benthic.txt and Env_metrics.txt as species and envdata.all).  Added "mgcv::" to "gam()." and "Hmisc::" to "wtd.quantile" and "Ecdf".
+
+
+# v0.0.0.9004
+2017-04-14
+
+* Revised comment strings in scripts so will properly outline in RStudio; curve.shape.R, fish.wt.cdf.R, taxon.response.R, taxaon.response.sort.R, and tolerance.R.  Also modified data prep files in raw data.
+
+* tolerance().  Tweaked for example.  Added data files (tol.ss and tol.env.data).  Added "mgcv::" to "gam()." and "Hmisc::" to "wtd.quantile".  Created data from raw files and documented.
+
+# v0.0.0.9003
+2017-04-06
+
+* taxon.response.sort().  Process raw data.  Add data files df1.rda and taxalist.rda. Add library mgcv reference for gam().  Updated data.R for df1 and taxalist.
+
+* Added new function dir.check.add() to ensure output folders exist.
+
+* DESCRIPTION.  Add mgcv to Imports.
+
+# v0.0.0.9002
+2017-04-05
+
+* Rename package from InvertExtirp to XC95.  Update DESCRIPTION, NEWS, and README.
+
+* Add data to use with examples.
+
+* Added raw data for weightcdf().  Included script for creating the RDA files.
+
+* Added documentation for the above data files (ss and bio.sample).
+
+# v0.0.0.9001
+2017-04-04
+
+* Update the R files for readability, documentation, and dependant packages for the functions.  "tolerance_cov.R" requires the "reshape" package (update one call to reshape::cast and add to DESCRIPTION).
+
+* Rename "tolerance_cov.R" to "tolerance.R" to match the function.
+
+# v0.0.0.9000
+2017-03-29
+
+* Created GitHub repository.
+
+* Added ReadME.RMD and NEWS.RMD
+
+* 7 functions; curve.shape, fish.gam, fish.wt.cdf, taxon.response, taxon.response.sort, tolerance_cov, weightedcdf2.
+
+

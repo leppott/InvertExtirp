@@ -26,4 +26,3 @@ dir.check.add(Dir.main, Dir.sub)
 \keyword{check,}
 \keyword{create}
 \keyword{directory,}
-

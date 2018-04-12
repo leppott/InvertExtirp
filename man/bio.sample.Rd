@@ -12,4 +12,3 @@ bio.sample
 Environmental data.
 }
 \keyword{datasets}
-

@@ -7,7 +7,7 @@
 fish.wt.cdf(datafile = datafile, ss = ss, plot = T, dogam = F,
   SampleID = "Station_Date", tag = "", sortvect = NULL, np = 61,
   nt = 25, addtrend = F, wd = getwd(), groups = c("BigHUC", "ECOREGL3",
-  "WS_Area"), xvar = "cond")
+  "WS_AREA"), xvar = "cond")
 }
 \arguments{
 \item{datafile}{environmental data, default = "datafile" from global environment.}
@@ -48,17 +48,10 @@ Weighted cdf function to calculate XC95 values
 data(dta.do)
 data(ss.sites)
 # run function (~20 seconds)
-dftv.do <- fish.wt.cdf(datafile = dta.do, ss = ss.sites, plot = T, dogam = T,
-                      SampleID = "FishInvertFID", tag = "wt", sortvect = NULL, np = 61, nt = 25, addtrend = T, wd = getwd())
+dftv.do <- fish.wt.cdf(datafile = dta.do, ss = ss.sites, plot = T, dogam = T
+                      , SampleID = "Station_Date", tag = "wt", sortvect = NULL
+                      , np = 61, nt = 25, addtrend = T
+                      , wd = getwd(), groups = c("BigHUC","ECOREGL3","WS_AREA")
+                      , xvar = "cond")
 View(dftv.do)
 }
-\keyword{cdf,}
-\keyword{gam,}
-\keyword{hc05,}
-\keyword{logistic}
-\keyword{quantiles,}
-\keyword{regression,}
-\keyword{response}
-\keyword{taxon}
-\keyword{xc95,}
-

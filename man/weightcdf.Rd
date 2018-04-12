@@ -42,4 +42,3 @@ allyear <- weightcdf(df1 = bio.sample[!is.na(bio.sample$lgSO4HCO3),], ss = ss, S
 \keyword{response}
 \keyword{taxon}
 \keyword{xc95,}
-

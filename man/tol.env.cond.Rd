@@ -12,4 +12,3 @@ tol.env.cond
 For tolerance() example, environmental data.
 }
 \keyword{datasets}
-

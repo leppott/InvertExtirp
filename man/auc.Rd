@@ -41,4 +41,3 @@ lrm195f <- auc(xrange, lrm1, dense.N, taus, "tolerance")
 \keyword{area}
 \keyword{curve,}
 \keyword{under}
-

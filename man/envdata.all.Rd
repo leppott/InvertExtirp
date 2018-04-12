@@ -12,4 +12,3 @@ envdata.all
 For taxon.response() example, environmental data.
 }
 \keyword{datasets}
-

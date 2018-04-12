@@ -74,4 +74,3 @@ View(full.results)
 \keyword{response}
 \keyword{taxon}
 \keyword{xc95,}
-

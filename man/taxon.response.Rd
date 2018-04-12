@@ -98,4 +98,3 @@ View(whole.values)
 \keyword{response}
 \keyword{taxon}
 \keyword{xc95,}
-

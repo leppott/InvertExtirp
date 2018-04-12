@@ -12,4 +12,3 @@ df1
 Species crosstab (ss) with environmental variable lgSO4HCO3 and lat/long fields.
 }
 \keyword{datasets}
-
