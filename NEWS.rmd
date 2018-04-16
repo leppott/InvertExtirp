@@ -27,6 +27,23 @@ Version history.
 
 * No vignettes planned at this time.
 
+# v0.0.2.0000
+2018-04-16
+
+* wt.cdf
+    + Replacement for fish.wt.cdf.
+    + More generic and a few more inputs to make more adaptable.
+
+# v0.0.1.9004
+2018-04-13
+
+* fish.wt.cdf, Example remove extra comment.
+* wt.cdf
+    + Updated version of fish.wt.cdf.
+    + More flexibility with groups.
+    + Added group names.
+    + Defaulted all boolean parameters to TRUE.
+    
 # v0.0.1.9003
 2018-04-12
 

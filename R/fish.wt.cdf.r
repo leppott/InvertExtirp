@@ -18,21 +18,21 @@
 #'#'
 #' @param datafile environmental data, default = "datafile" from global environment.
 #' @param ss Species crosstabed data; default = "ss" from global environment.
-#' @param plot A boolean to choose if plot cdf and gam plots; default = F.
-#' @param dogam A booleen to choose if a gam fit is calculated; default = F.
+#' @param plot A boolean to choose if plot cdf and gam plots; default = T.
+#' @param dogam A booleen to choose if a gam fit is calculated; default = T.
 #' @param SampleID Site/sample id column; default = "Station_Date"
 #' @param tag Default = "".
 #' @param sortvect to provide a vector of species list so plots will be sorted according to the list; default = NULL.
 #' @param np Number of bins; default = 61.
 #' @param nt Minimum number of occurence; default = 25.
-#' @param addtrend A booleen if a trend should be added ( = ">" etc) in the output (T or F); default = F.
+#' @param addtrend A booleen if a trend should be added ( = ">" etc) in the output (T or F); default = T.
 #' @param wd Working directory for saving files.
 #' @param groups column names in datafile used for grouping the data; HUC (BigHUC), Ecoregion (ECOREGL3), and Watershed Area (WS_Area)
 #' @param xvar variable on which to base calculations; default  = "cond"
 #' @return A dataframe of XC95 values and TIFF files of gam and/or cdf plots in the subdirectory "Results" of the directory specified by "wd".
 #'
 #' @examples
-#' #' # data
+#' # data
 #' data(dta.do)
 #' data(ss.sites)
 #' # run function (~20 seconds)
@@ -42,9 +42,28 @@
 #'                       , wd = getwd(), groups = c("BigHUC","ECOREGL3","WS_AREA")
 #'                       , xvar = "cond")
 #' View(dftv.do)
+#~~~~~~~~~~~~~~~~~~~
+# QC
+# data(dta.do)
+# data(ss.sites)
+# datafile = dta.do
+# ss = ss.sites
+# plot = T
+# dogam = T
+# SampleID = "Station_Date"
+# tag = "wt"
+# sortvect = NULL
+# np = 61
+# nt = 25
+# addtrend = T
+# wd = getwd()
+# groups = c("BigHUC","ECOREGL3","WS_AREA")
+# xvar = "cond"
+# index <- 1
+#~~~~~~~~~~~~~~~~~~~~~
 #' @export
-fish.wt.cdf <- function(datafile = datafile, ss = ss, plot = T, dogam = F,
-              SampleID = "Station_Date", tag = "", sortvect = NULL, np = 61, nt = 25, addtrend = F,
+fish.wt.cdf <- function(datafile = datafile, ss = ss, plot = T, dogam = T,
+              SampleID = "Station_Date", tag = "", sortvect = NULL, np = 61, nt = 25, addtrend = T,
               wd = getwd(), groups = c("BigHUC","ECOREGL3","WS_AREA"), xvar = "cond") {##FUNCTION.fish.wt.cdf.START
   #
   # 20170424, change df1$cond to df1[,xvar]

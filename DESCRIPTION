@@ -1,6 +1,6 @@
 Package: XC95
 Title: Extirpation Analysis for Benthic Macroinvertebrates and Fish
-Version: 0.0.1.9003
+Version: 0.0.2.0000
 Authors@R: c(person("Lei", "Zheng", role=c("aut")),
 	person("Erik","Leppo", email="Erik.Leppo@tetratech.com", role=c("ctb","cre")))
 Description: To aid and simplify extirpation analysis for benthic macroinvertebrates and fish against environmental variables through the use of built in functions.  Calculates the XC95 value.

@@ -4,30 +4,41 @@
 # Erik.Leppo@tetratech.com
 # 20170223
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# NEWS
+# Render then Copy NEWS so picked up in help
+rmarkdown::render("NEWS.rmd", "all")
+file.copy("NEWS.md", "NEWS", overwrite = TRUE)
+file.remove("NEWS.html")
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Library Name
-myLibrary <- "XC95" # "ContDataQC","MMIcalc","MMIcalcNV","MBSStools","XC95"
+myLibrary <- "XC95"
 # Load Library
 library(devtools)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Create Package
 # create(myLibrary)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# files to library folder
-# file.copy("metric.values.R","./Library/MMIcalc/R/metric.values.R",overwrite=TRUE)
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Document, Install, and Reload Library
 ## Generate Documentation
-setwd(paste0("./",myLibrary))
+setwd(paste0("./", myLibrary))
 devtools::document()
 ## Install New Package (locally)
 setwd("..") # return to root directory first
 devtools::install(myLibrary)
 ## Reload library
-library(myLibrary,character.only = TRUE)
+library(myLibrary, character.only = TRUE)
+# change wd back to package
+setwd(paste0("./", myLibrary))
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
+
+
+
+## Restart R within RStudio:  Ctrl + Shift + F10
+library("XC95")
+help(package="XC95")
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Upload to Github via GitHub Desktop utility
 # 0. download from web via "clone or download" via "Open in Desktop" (GitHub Desktop) if not already in GitHub Desktop

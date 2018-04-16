@@ -4,9 +4,9 @@
 \alias{fish.wt.cdf}
 \title{A function to calculate a weighted CDF for XC95 values.}
 \usage{
-fish.wt.cdf(datafile = datafile, ss = ss, plot = T, dogam = F,
+fish.wt.cdf(datafile = datafile, ss = ss, plot = T, dogam = T,
   SampleID = "Station_Date", tag = "", sortvect = NULL, np = 61,
-  nt = 25, addtrend = F, wd = getwd(), groups = c("BigHUC", "ECOREGL3",
+  nt = 25, addtrend = T, wd = getwd(), groups = c("BigHUC", "ECOREGL3",
   "WS_AREA"), xvar = "cond")
 }
 \arguments{
@@ -14,9 +14,9 @@ fish.wt.cdf(datafile = datafile, ss = ss, plot = T, dogam = F,
 
 \item{ss}{Species crosstabed data; default = "ss" from global environment.}
 
-\item{plot}{A boolean to choose if plot cdf and gam plots; default = F.}
+\item{plot}{A boolean to choose if plot cdf and gam plots; default = T.}
 
-\item{dogam}{A booleen to choose if a gam fit is calculated; default = F.}
+\item{dogam}{A booleen to choose if a gam fit is calculated; default = T.}
 
 \item{SampleID}{Site/sample id column; default = "Station_Date"}
 
@@ -28,7 +28,7 @@ fish.wt.cdf(datafile = datafile, ss = ss, plot = T, dogam = F,
 
 \item{nt}{Minimum number of occurence; default = 25.}
 
-\item{addtrend}{A booleen if a trend should be added ( = ">" etc) in the output (T or F); default = F.}
+\item{addtrend}{A booleen if a trend should be added ( = ">" etc) in the output (T or F); default = T.}
 
 \item{wd}{Working directory for saving files.}
 
@@ -44,7 +44,7 @@ Weighted cdf function to calculate XC95 values
 #'
 }
 \examples{
-#' # data
+# data
 data(dta.do)
 data(ss.sites)
 # run function (~20 seconds)
