@@ -2,26 +2,27 @@ README-XC95
 ================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-    #> Last Update: 2017-04-24 16:27:43
+
+    #> Last Update: 2018-04-23 15:38:09
+
+[![Travis-CI Build
+Status](https://travis-ci.org/leppott/XC95.svg?branch=master)](https://travis-ci.org/leppott/XC95)
 
 Extirpation analysis for benthic macroinvertebrates.
 
-Installation
-------------
+## Installation
 
 library(devtools) \#install if needed
 
-install\_github("leppott/XC95")
+install\_github(“leppott/XC95”)
 
-Purpose
--------
+## Purpose
 
-To aid and simplify extirpation analysis for benthic macroinvertebrates (or fish) through the use of built in functions.
+To aid and simplify extirpation analysis for benthic macroinvertebrates
+(or fish) through the use of built in functions.
 
-Status
-------
+## Status
 
 Minimally viable package. All functions with working examples and data.
 
-Usage
------
+## Usage

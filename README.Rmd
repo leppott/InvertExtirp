@@ -17,6 +17,9 @@ knitr::opts_chunk$set(
 cat(paste0("Last Update: ",Sys.time()))
 ```
 
+
+[![Travis-CI Build Status](https://travis-ci.org/leppott/XC95.svg?branch=master)](https://travis-ci.org/leppott/XC95)
+
 Extirpation analysis for benthic macroinvertebrates.
 
 Installation

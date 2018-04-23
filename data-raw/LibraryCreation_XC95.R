@@ -50,7 +50,6 @@ devtools::install_github(paste0("leppott/",myLibrary))
 #
 
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # remove installed packages (if needed for troubleshooting)
 search() # find
@@ -78,3 +77,10 @@ search() # find
 #https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/
 # Create Package
 # create(myLibrary)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Travis_CI ####
+# https://juliasilge.com/blog/beginners-guide-to-travis/
+
+# Add yaml file
+devtools::use_travis()

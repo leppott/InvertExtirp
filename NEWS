@@ -3,7 +3,7 @@ NEWS-XC95
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
-    #> Last Update: 2018-04-16 12:55:17
+    #> Last Update: 2018-04-23 15:39:31
 
 Version history.
 
@@ -12,6 +12,12 @@ Version history.
   - Only bug fixes planned at this time.
 
   - No vignettes planned at this time.
+
+# v0.0.2.9001
+
+2018-04-23
+
+  - Add Travic\_CI check to readme.
 
 # v0.0.2.0000
 
