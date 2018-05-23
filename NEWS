@@ -3,7 +3,7 @@ NEWS-XC95
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
-    #> Last Update: 2018-04-23 15:39:31
+    #> Last Update: 2018-05-23 14:20:53
 
 Version history.
 
@@ -12,6 +12,18 @@ Version history.
   - Only bug fixes planned at this time.
 
   - No vignettes planned at this time.
+
+# v0.0.2.9002
+
+2018-05-23
+
+  - tolerance
+      - Updated parameters text.
+      - Added Details section to describe output.
+      - Added reference to maps package
+      - No modifications of analysis.
+  - DESCRIPTION
+      - Added maps to Imports.
 
 # v0.0.2.9001
 

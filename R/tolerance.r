@@ -10,7 +10,7 @@
 # dense.N is the number of areas to cut into in the calculation of area under the curve
 # plot.pdf to decide if we want specise vs. env plots
 # log.x to decide if we want to log transform and plot data
-# rounder howmany digits
+# rounder how many digits
 # bad is a boolean variabl to determine if the variable is bad for senstivie taxa
 # taus determine the output the percentile of env variable
 # r is a proportional ratio for predicted model output, as 0.95 is the 95% of optimum probability
@@ -21,14 +21,14 @@
   #library(reshape)  #not sure if got all references, EWL, 20170329
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-#' Tolerance
+#' @title Tolerance
 #'
-#' A function to calculate species response curves using various models.
+#' @description A function to calculate species response curves using various models.
 #' Get optimum value from taxon-environment relationship
 #' 1.WA, 2. cdf_Abundance 3. cdf_p/a. 4. ecdf weighted
 #' 5. Linear logistic 6. quadratic logistic 7. GAM  5~7 using full data range;
 #'  11. Count. 12. Raw quantiles
-#'  Requires the "reshape" and "mgcv" libraries.
+#'  Requires the "reshape", "mgcv", and "maps" libraries.
 #'
 #' @param spdata Species data.
 #' @param envdata Environmental data.
@@ -39,36 +39,88 @@
 #' @param env.siteid Environmental data frame column name for site/sample id.  Default is "Sample.ID"
 #' @param xvar Environmental data frame column name for analyte used in analysis; default = "cond"
 #' @param cutoff cutoff 1; default = 20
-#' @param cutoff2 cutoff 2; default = 10
+#' @param cutoff2 cutoff 2; Min number of samples for taxa occurrence.  Only those above cut off are plotted.  default = 10
 #' @param region region.  A folder will be created in the working directory (wd) for the region; default = "all"
 #' @param lim "GAM" or "CDF" ; default = "GAM"  if lim == "GAM", add gam plot xc95 otherwise, add   "CDF"
-#' @param coord c("LONG_DD", "LAT_DD").  Default is NULL.
+#' @param coord Map coordinates of samples; c("LONG_DD", "LAT_DD").  Default is NULL.
 #' @param mtype 1 linear, 2 quadratic 3 gam model for ploting purpose; default = 3.
 #' @param dense.N the number of areas to cut into in the calculation of area under the curve; default = 201.
 #' @param cast ; default = TRUE,
 #' @param plot.pdf to decide if we want specise vs. env plots; default = F
 #' @param add.map boolean for if a map should be plotted.  Requires statename coord; default = F
-#' @param statename State name used for map; default = NULL
+#' @param statename State name (e.g., Maryland) used for map; default = NULL
 #' @param add.lab boolean for adding labels to map; default = F
 #' @param add.abund boolean for adding abundance to map; default = T.
 #' @param main = "Capture Probability of Macroinvertebrate Taxon Along Conductivity Gradient",
-#' @param mar Plot margins; default = c(5,4,3, 4)
+#' @param mar Plot margins; default = c(5, 4, 3, 4)
 #' @param xlabs X-axis labels for plots; default = expression(paste("Conductivity ( ", mu, "S/cm)"))
-#' @param log.x To decide if we want to log transform and plot data; default = TRUE.  log.x to use log1o transformed data, plus to use log10(+1) transformed data, sqrt
-#' @param plus ; default = F
-#' @param rounder How many digits; default = 0.
+#' @param log.x Whether to log transform and plot data; default = TRUE.  log.x to use log10 transformed data, plus to use log10(+1) transformed data, sqrt
+#' @param plus ; Use with log.x=TRUE if want log10(+1) transformation.  default = F
+#' @param rounder How many digits to round results; default = 0.
 #' @param taus determine the output the percentile of env variable; default = c(50,95)
 #' @param nbin number of bins; default = 61
 #' @param wd Working directory for saving files.
+#
 #' @return Returns a data frame (cond.opt) and generates a PDF (results.taxon.gam.pdf) of plots (within the working directory in a subfolder for the region).
+#
 #' @keywords logistic regression, quantiles, xc95, hc05, cdf, gam, taxon response
+#
+#' @details Species data file can be long or wide format.  
+#' If in long format use cast=TRUE to transform.
+#' 
+#' Cutoff2 will limit the analysis based on taxon occurrence across all sites.  
+#' Only those above this values will have plots generated.
+#' 
+#' Cutoff is used for co-occurrence of taxa and the environmental variable.  
+#' Taxa below this threshold will not have curves added to the plots.
+#' 
+#' Plots will be produced in a PDF and saved to the specified folder (region) based on user defined variables.
+#' 
+#' The output data frame will have the following fields.  
+#' The variable 'taus' determines the quantiles for some calculations.
+#' With the default values of 50 and 95 the 50th and 95th fields are shown below.
+#' 
+#' * tnames = taxa names derived from input data frame spdata
+#' 
+#' * N = Number of samples where taxon and environmental variable co-occur. samplen
+#' 
+#' * min_ob = minimum observation of environmental variable where taxon occurs. limits.
+#' 
+#' * X50_th_ob = 50th quantile observation of environmental variable where taxon occurs. limits.
+#' 
+#' * X95_th_ob = 95th quantile observation of environmental variable where taxon occurs.  limits.
+#' 
+#' * max_ob	= minimum observation of environmental variable where taxon occurs. limits.
+#' 
+#' * Opt_WA = Results model 1, weighted averaging, WA
+#' 
+#' * Tol_WA =  Results model 1, weighted averaging, tol
+#' 
+#' * CDF_50_th_Abund and CDF_95_th_Abund= Results model 2, cdf_Abundance,  df1[ic1,xvar]
+#' 
+#' * CDF_50_th_PA and CDF_95_th_PA= Results model 3, cdf_p/a,  df1[ic2,xvar]
+#' 
+#' * CDF_wt_50_th and CDF_wt_95_th = Results model 4, ecdf weighted, eout
+#' 
+#' * LRM_50_th and LRM_95_th= Results model 5, linear logistic,  lrm1.95f
+#' 
+#' * QLRM_50_th and QLRM_95_th = Results model 6, quadratic logistic, lrm2.95f
+#' 
+#' * Opt_qlrm = Results model 6, quadratic logistic, lrm2.opt
+#' 
+#' * Tol_qlrm = Results model 6, quadratic logistic, lrm2.tol
+#' 
+#' * GAM_50_th and GAM_95_th = Results model 7, GAM, lrm3.95f
+#' 
+#' * ROC = Summarizes all comparisons to compute area under ROC, roc
+#
 #' @examples
 #' region = "results"
 #' env.cond <- tol.env.cond
 #' ss <- tol.ss
 #' condunit <- expression(paste("Conductivity ( ", mu, "S/cm)", sep = ""))
-#' cond.opt <- tolerance(spdata= ss, envdata= env.cond,  sp.siteid="NewSampID", species="Genus", covar=NULL,
-#'                       sp.abndid="RA", env.siteid="NewSampID", xvar="cond", cutoff = 25, cutoff2 = 10,
+#' cond.opt <- tolerance(spdata = ss, envdata = env.cond,  sp.siteid = "NewSampID", species = "Genus", covar=NULL,
+#'                       sp.abndid = "RA", env.siteid = "NewSampID", xvar = "cond", cutoff = 25, cutoff2 = 10,
 #'                       region = "results", lim ="GAM", coord = NULL, mtype = 3, dense.N = 201, cast = FALSE,
 #'                       plot.pdf = T, add.map = F, statename = NULL,  add.lab = F, add.abund=T,
 #'                       main = "Capture Probability of Macroinvertebrate Taxon Along Conductivity Gradient",
@@ -80,13 +132,13 @@
 #' system(paste0('open "',file.path(getwd(),region,"results.taxon.gam.pdf"),'"'))
 #
 #' @export
-tolerance <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS", covar = NULL,
-        sp.abndid="RA", env.siteid="Sample.ID", xvar="cond", cutoff = 20, cutoff2 = 10,
+tolerance <- function(spdata, envdata,  sp.siteid = "Sample.ID", species = "GENUS", covar = NULL,
+        sp.abndid="RA", env.siteid = "Sample.ID", xvar = "cond", cutoff = 20, cutoff2 = 10,
         region = "all", lim ="GAM", coord = NULL, mtype = 3, dense.N = 201, cast = TRUE,
-        plot.pdf = F, add.map=F,statename = NULL,  add.lab = F, add.abund = T,
+        plot.pdf = F, add.map = F,statename = NULL,  add.lab = F, add.abund = T,
         main = "Capture Probability of Macroinvertebrate Taxon Along Conductivity Gradient",
-        mar = c(5,4,3,4), xlabs=expression(paste("Conductivity ( ", mu, "S/cm)")),
-        log.x = TRUE, plus = F, rounder = 0, taus = c(50,95), nbin = 61, wd=getwd()) {##FUNCTION.tolerance.START
+        mar = c(5,4,3,4), xlabs = expression(paste("Conductivity (", mu, "S/cm)")),
+        log.x = TRUE, plus = F, rounder = 0, taus = c(50,95), nbin = 61, wd = getwd()) {##FUNCTION.tolerance.START
 
   # 20170413, add directory check
   dir.check.add(wd,region)
@@ -106,7 +158,7 @@ tolerance <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS", 
   } else ss <- spdata
   ##IF.cast.END
 
-  taxa.count <- apply(ss[-1] > 0, 2, sum)
+  taxa.count <- apply(ss[-1] > 0, 2, sum)  # same as colSums(ss[,-1]>0)
   tnames <- names(taxa.count)[taxa.count >= cutoff2]
   ntaxa <- length(tnames)                           # length of taxa list for taxonomic level i
 
@@ -193,14 +245,14 @@ tolerance <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS", 
       while(is.na(df1[med, coord[1]])) med = 1 + med
 
       if(is.null(statename)) {
-      statename <<- map.where("state", df1[med, coord[1]], df1[med, coord[2]])
+      statename <<- maps::map.where("state", df1[med, coord[1]], df1[med, coord[2]])
       statename <- simpleCap(statename)
       }
 
        if(add.lab) {
-       map.text("state", region = statename, mar = mar)
+       maps::map.text("state", region = statename, mar = mar)
        } else {
-       map("state", regions = statename, mar = mar)
+       maps::map("state", regions = statename, mar = mar)
        }
 
        text(df1[,coord[1]],df1[,coord[2]],".")
@@ -347,10 +399,10 @@ tolerance <- function(spdata, envdata,  sp.siteid="Sample.ID", species="GENUS", 
          points(xnew, low.bound, type="l", col=1, lty="dashed")
          points(xnew, up.bound, type="l", col=1,lty="dashed")
          if(lim =="GAM") {##IF.lim.START
-         abline(v= lrm3.95f, lty= "dashed", col="red")
-         } else if(lim =="CDF"){
-         abline(v= eout2, lty= "dashed", col="blue")
-         }##IF.lim.END
+            abline(v= lrm3.95f, lty= "dashed", col="red")
+            } else if(lim =="CDF"){
+            abline(v= eout2, lty= "dashed", col="blue")
+            }##IF.lim.END
        }##IF.samplen.END
 
        max.pow <- ceiling(max(xrange)); min.pow <- floor(min(xrange))  ## add x range for log formation

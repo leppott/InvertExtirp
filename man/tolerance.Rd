@@ -11,7 +11,7 @@ tolerance(spdata, envdata, sp.siteid = "Sample.ID", species = "GENUS",
   plot.pdf = F, add.map = F, statename = NULL, add.lab = F,
   add.abund = T,
   main = "Capture Probability of Macroinvertebrate Taxon Along Conductivity Gradient",
-  mar = c(5, 4, 3, 4), xlabs = expression(paste("Conductivity ( ", mu,
+  mar = c(5, 4, 3, 4), xlabs = expression(paste("Conductivity (", mu,
   "S/cm)")), log.x = TRUE, plus = F, rounder = 0, taus = c(50, 95),
   nbin = 61, wd = getwd())
 }
@@ -34,13 +34,13 @@ tolerance(spdata, envdata, sp.siteid = "Sample.ID", species = "GENUS",
 
 \item{cutoff}{cutoff 1; default = 20}
 
-\item{cutoff2}{cutoff 2; default = 10}
+\item{cutoff2}{cutoff 2; Min number of samples for taxa occurrence.  Only those above cut off are plotted.  default = 10}
 
 \item{region}{region.  A folder will be created in the working directory (wd) for the region; default = "all"}
 
 \item{lim}{"GAM" or "CDF" ; default = "GAM"  if lim == "GAM", add gam plot xc95 otherwise, add   "CDF"}
 
-\item{coord}{c("LONG_DD", "LAT_DD").  Default is NULL.}
+\item{coord}{Map coordinates of samples; c("LONG_DD", "LAT_DD").  Default is NULL.}
 
 \item{mtype}{1 linear, 2 quadratic 3 gam model for ploting purpose; default = 3.}
 
@@ -52,7 +52,7 @@ tolerance(spdata, envdata, sp.siteid = "Sample.ID", species = "GENUS",
 
 \item{add.map}{boolean for if a map should be plotted.  Requires statename coord; default = F}
 
-\item{statename}{State name used for map; default = NULL}
+\item{statename}{State name (e.g., Maryland) used for map; default = NULL}
 
 \item{add.lab}{boolean for adding labels to map; default = F}
 
@@ -60,15 +60,15 @@ tolerance(spdata, envdata, sp.siteid = "Sample.ID", species = "GENUS",
 
 \item{main}{= "Capture Probability of Macroinvertebrate Taxon Along Conductivity Gradient",}
 
-\item{mar}{Plot margins; default = c(5,4,3, 4)}
+\item{mar}{Plot margins; default = c(5, 4, 3, 4)}
 
 \item{xlabs}{X-axis labels for plots; default = expression(paste("Conductivity ( ", mu, "S/cm)"))}
 
-\item{log.x}{To decide if we want to log transform and plot data; default = TRUE.  log.x to use log1o transformed data, plus to use log10(+1) transformed data, sqrt}
+\item{log.x}{Whether to log transform and plot data; default = TRUE.  log.x to use log10 transformed data, plus to use log10(+1) transformed data, sqrt}
 
-\item{plus}{; default = F}
+\item{plus}{; Use with log.x=TRUE if want log10(+1) transformation.  default = F}
 
-\item{rounder}{How many digits; default = 0.}
+\item{rounder}{How many digits to round results; default = 0.}
 
 \item{taus}{determine the output the percentile of env variable; default = c(50,95)}
 
@@ -85,15 +85,65 @@ Get optimum value from taxon-environment relationship
 1.WA, 2. cdf_Abundance 3. cdf_p/a. 4. ecdf weighted
 5. Linear logistic 6. quadratic logistic 7. GAM  5~7 using full data range;
  11. Count. 12. Raw quantiles
- Requires the "reshape" and "mgcv" libraries.
+ Requires the "reshape", "mgcv", and "maps" libraries.
+}
+\details{
+Species data file can be long or wide format.  
+If in long format use cast=TRUE to transform.
+
+Cutoff2 will limit the analysis based on taxon occurrence across all sites.  
+Only those above this values will have plots generated.
+
+Cutoff is used for co-occurrence of taxa and the environmental variable.  
+Taxa below this threshold will not have curves added to the plots.
+
+Plots will be produced in a PDF and saved to the specified folder (region) based on user defined variables.
+
+The output data frame will have the following fields.  
+The variable 'taus' determines the quantiles for some calculations.
+With the default values of 50 and 95 the 50th and 95th fields are shown below.
+
+* tnames = taxa names derived from input data frame spdata
+
+* N = Number of samples where taxon and environmental variable co-occur. samplen
+
+* min_ob = minimum observation of environmental variable where taxon occurs. limits.
+
+* X50_th_ob = 50th quantile observation of environmental variable where taxon occurs. limits.
+
+* X95_th_ob = 95th quantile observation of environmental variable where taxon occurs.  limits.
+
+* max_ob	= minimum observation of environmental variable where taxon occurs. limits.
+
+* Opt_WA = Results model 1, weighted averaging, WA
+
+* Tol_WA =  Results model 1, weighted averaging, tol
+
+* CDF_50_th_Abund and CDF_95_th_Abund= Results model 2, cdf_Abundance,  df1[ic1,xvar]
+
+* CDF_50_th_PA and CDF_95_th_PA= Results model 3, cdf_p/a,  df1[ic2,xvar]
+
+* CDF_wt_50_th and CDF_wt_95_th = Results model 4, ecdf weighted, eout
+
+* LRM_50_th and LRM_95_th= Results model 5, linear logistic,  lrm1.95f
+
+* QLRM_50_th and QLRM_95_th = Results model 6, quadratic logistic, lrm2.95f
+
+* Opt_qlrm = Results model 6, quadratic logistic, lrm2.opt
+
+* Tol_qlrm = Results model 6, quadratic logistic, lrm2.tol
+
+* GAM_50_th and GAM_95_th = Results model 7, GAM, lrm3.95f
+
+* ROC = Summarizes all comparisons to compute area under ROC, roc
 }
 \examples{
 region = "results"
 env.cond <- tol.env.cond
 ss <- tol.ss
 condunit <- expression(paste("Conductivity ( ", mu, "S/cm)", sep = ""))
-cond.opt <- tolerance(spdata= ss, envdata= env.cond,  sp.siteid="NewSampID", species="Genus", covar=NULL,
-                      sp.abndid="RA", env.siteid="NewSampID", xvar="cond", cutoff = 25, cutoff2 = 10,
+cond.opt <- tolerance(spdata = ss, envdata = env.cond,  sp.siteid = "NewSampID", species = "Genus", covar=NULL,
+                      sp.abndid = "RA", env.siteid = "NewSampID", xvar = "cond", cutoff = 25, cutoff2 = 10,
                       region = "results", lim ="GAM", coord = NULL, mtype = 3, dense.N = 201, cast = FALSE,
                       plot.pdf = T, add.map = F, statename = NULL,  add.lab = F, add.abund=T,
                       main = "Capture Probability of Macroinvertebrate Taxon Along Conductivity Gradient",
