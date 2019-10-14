@@ -1,3 +1,4 @@
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' bio.sample
 #'
 #' Environmental data.
@@ -6,7 +7,7 @@
 #'
 #'
 "bio.sample"
-
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' ss
 #'
 #' Species crosstab table of relative abundance of each taxon at each site/sample ID (row).
@@ -18,7 +19,7 @@
 #'
 #'
 "ss"
-
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' df1
 #'
 #' Species crosstab (ss) with environmental variable lgSO4HCO3 and lat/long fields.
@@ -27,7 +28,7 @@
 #'
 #'
 "df1"
-
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' taxalist
 #'
 #' A vector of 142 species names.
@@ -36,7 +37,7 @@
 #'
 #'
 "taxalist"
-
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' tol.ss
 #'
 #' For tolerance() example, a species crosstab table of relative abundance of each taxon at each site/sample ID (row).
@@ -45,7 +46,7 @@
 #'
 #'
 "tol.ss"
-
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' tol.env.cond
 #'
 #' For tolerance() example, environmental data.
@@ -54,7 +55,7 @@
 #'
 #'
 "tol.env.cond"
-
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' species
 #'
 #' For taxon.response() example, a species table of relative abundance of each taxon at each site/sample ID.
@@ -63,7 +64,7 @@
 #'
 #'
 "species"
-
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' envdata.all
 #'
 #' For taxon.response() example, environmental data.
@@ -72,7 +73,7 @@
 #'
 #'
 "envdata.all"
-
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' dta.do
 #'
 #' For fish.weighted.cdf() example, environmental data (DO).
@@ -81,7 +82,7 @@
 #'
 #'
 "dta.do"
-
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' ss.sites
 #'
 #' For fish.weighted.cdf() example, a species list of relative abundance of each taxon at each site/sample ID.

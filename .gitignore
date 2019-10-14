@@ -3,4 +3,6 @@
 .RData
 *.Rproj
 .Rbuildignore
+_test
+Results
 

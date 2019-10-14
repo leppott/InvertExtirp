@@ -4,15 +4,15 @@
 \alias{taxon.response}
 \title{Plot Taxa Response Curve and Calculate Species Extirpation Concentrations}
 \usage{
-taxon.response(spdata, envdata, sp.siteid = "Sample.ID", species = "GENUS",
-  sp.abndid = "RA", env.siteid = "Sample.ID", xvar = "COND",
-  cutoff = 30, region = "all", lim = "CDF", coord = NULL, mtype = 3,
-  dense.N = 201, plot.pdf = F, add.map = F, statename = NULL,
-  add.lab = F,
+taxon.response(spdata, envdata, sp.siteid = "Sample.ID",
+  species = "GENUS", sp.abndid = "RA", env.siteid = "Sample.ID",
+  xvar = "COND", cutoff = 30, region = "all", lim = "CDF",
+  coord = NULL, mtype = 3, dense.N = 201, plot.pdf = F,
+  add.map = F, statename = NULL, add.lab = F,
   main = "Capture Probability of Macroinvertebrate Taxon Along Conductivity Gradient",
   mar = c(5, 4, 3, 2), xlabs = expression(paste("Conductivity ( ", mu,
-  "S/cm)")), log.x = TRUE, rounder = 0, taus = c(0, 95, 100), nbin = 61,
-  wd = getwd())
+  "S/cm)")), log.x = TRUE, rounder = 0, taus = c(0, 95, 100),
+  nbin = 61, wd = getwd())
 }
 \arguments{
 \item{spdata}{Species data.}

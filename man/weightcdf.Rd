@@ -4,8 +4,8 @@
 \alias{weightcdf}
 \title{Simple weighted cdf}
 \usage{
-weightcdf(df1 = my.samp, ss = ss, SampID = "Sample.ID", xvar = "cond",
-  nt = 25, log = TRUE, np = 61)
+weightcdf(df1 = my.samp, ss = ss, SampID = "Sample.ID",
+  xvar = "cond", nt = 25, log = TRUE, np = 61)
 }
 \arguments{
 \item{df1}{; default = my.samp}

@@ -9,6 +9,7 @@
 rmarkdown::render("NEWS.rmd", "all")
 file.copy("NEWS.md", "NEWS", overwrite = TRUE)
 file.remove("NEWS.html")
+file.remove("NEWS.md")
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Library Name
 myLibrary <- "XC95"

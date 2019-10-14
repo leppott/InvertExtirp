@@ -6,8 +6,8 @@
 \usage{
 fish.wt.cdf(datafile = datafile, ss = ss, plot = T, dogam = T,
   SampleID = "Station_Date", tag = "", sortvect = NULL, np = 61,
-  nt = 25, addtrend = T, wd = getwd(), groups = c("BigHUC", "ECOREGL3",
-  "WS_AREA"), xvar = "cond")
+  nt = 25, addtrend = T, wd = getwd(), groups = c("BigHUC",
+  "ECOREGL3", "WS_AREA"), xvar = "cond")
 }
 \arguments{
 \item{datafile}{environmental data, default = "datafile" from global environment.}

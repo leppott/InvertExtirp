@@ -6,8 +6,9 @@
 \usage{
 wt.cdf(data.env, data.sp.wide, plot = T, dogam = F,
   SampleID = "Station_Date", tag = "", sortvect = NULL, np = 61,
-  nt = 25, addtrend = F, wd = getwd(), groups = NULL, xvar = "cond",
-  groupNames = NULL, xvar.PlotName = "Specific Conductivity ( uS/cm)")
+  nt = 25, addtrend = F, wd = getwd(), groups = NULL,
+  xvar = "cond", groupNames = NULL,
+  xvar.PlotName = "Specific Conductivity ( uS/cm)")
 }
 \arguments{
 \item{data.env}{environmental data, default = "datafile" from global environment.}

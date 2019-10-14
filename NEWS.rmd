@@ -27,6 +27,14 @@ Version history.
 
 * No vignettes planned at this time.
 
+# v0.0.2.9003
+2019-10-14
+
+* HC05 calculation function.
+* Add some formatting to data.R.
+* Update DESCRIPTION.
+* Add "Results" and "_test" directories to .gitignore and .Rbuildignore.
+
 # v0.0.2.9002
 2018-05-23
 
