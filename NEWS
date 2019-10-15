@@ -3,7 +3,7 @@ NEWS-XC95
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
-    #> Last Update: 2019-10-14 15:53:17
+    ## Last Update: 2019-10-15 08:08:04
 
 Version history.
 
@@ -13,7 +13,13 @@ Version history.
 
   - No vignettes planned at this time.
 
-# v0.0.2.9003
+# XC95 0.0.3 (2019-10-15)
+
+  - New release version.
+      - HC05 calculation.
+      - Minor updates.
+
+# XC95 v0.0.2.9003
 
 2019-10-14
 

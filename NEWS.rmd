@@ -8,11 +8,11 @@ output: github_document
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
 ```{r, echo = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "NEWS-"
-)
+# knitr::opts_chunk$set(
+#   collapse = TRUE,
+#   comment = "#>",
+#   fig.path = "NEWS-"
+# )
 ```
 
 ```{r, echo = FALSE}
@@ -27,7 +27,13 @@ Version history.
 
 * No vignettes planned at this time.
 
-# v0.0.2.9003
+# XC95 0.0.3 (2019-10-15)
+
+* New release version.
+    + HC05 calculation.
+    + Minor updates.
+
+# XC95 v0.0.2.9003
 2019-10-14
 
 * HC05 calculation function.
