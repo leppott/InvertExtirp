@@ -27,6 +27,11 @@ Version history.
 
 * No vignettes planned at this time.
 
+# XC95 0.0.3.9001 (2019-11-07)
+
+* Add pkgdown website.
+    + hc05 example needs work.
+
 # XC95 0.0.3 (2019-10-15)
 
 * New release version.
